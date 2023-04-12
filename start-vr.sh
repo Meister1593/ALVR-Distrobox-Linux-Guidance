@@ -12,12 +12,12 @@ run_additional_stuff() {
 }
 
 run_vrstartup() {
-  setup_mic()
+  setup_mic
   $STEAMVR_PATH/bin/vrstartup.sh > /dev/null 2>&1 &
 }
 
 cleanup() {
-   unload_mic()
+   unload_mic
    for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
      pkill -f $vrp
    done

@@ -8,10 +8,10 @@ NC='\033[0m' # No Color
 STEP_INDEX=1
 
 function echog(){
-   echo -e "${STEP_INDEX} : ${GREEN}$1${NC}"
+   echo -e "${RED}${STEP_INDEX}${NC} : ${GREEN}$1${NC}"
 }
 function echor(){
-   echo -e "${STEP_INDEX} : ${RED}$1${NC}"
+   echo -e "${RED}${STEP_INDEX}${NC} : ${RED}$1${NC}"
 }
 
 function cleanup_alvr(){
@@ -61,7 +61,7 @@ mv squashfs-root alvr
 ./alvr/usr/bin/alvr_dashboard &> /dev/null &
 echog "ALVR and dashboard now launch and when it does that, skip setup (X button on right up corner)."
 echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu."
-echog "In ALVR Dashboard settings at left side, scroll down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
+echog "In ALVR Dashboard settings at left side, scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
 echog "You can also untick 'Open setup wizard' to. After you did that, press enter here"
 read
 echog "From this point on, alvr will automatically start with SteamVR. But it's still quite broken mechanism so we need to use additional script for auto-restart to work."
@@ -95,7 +95,7 @@ if [[ "$DO_PATCH" == "y" ]]; then
    ./patch_bindings_spam.sh "$HOME/.steam/steam/steamapps/common/SteamVR"
 fi
 
-cleanup()
+cleanup_alvr
 
 STEP_INDEX=$((STEP_INDEX + 1))
 
