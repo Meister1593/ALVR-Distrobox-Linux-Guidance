@@ -2,6 +2,8 @@
 
 source ./links.sh
 
+cd installation
+
 GPU="$(cat specs.conf | head -1 | tail -2)"
 AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
 
