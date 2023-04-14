@@ -57,5 +57,5 @@ else
    echo 'export PATH=$HOME/.local/bin:$PATH #alvr-distrobox' | tee -a ~/.bashrc
    echo 'export PATH=$HOME/.local/podman/bin:$PATH #alvr-distrobox' | tee -a ~/.bashrc
    
-   echo "Please re-enter your terminal application to continue in next step."
+   echo "Please re-enter your terminal application and re-run this script to continue in next step."
 fi
