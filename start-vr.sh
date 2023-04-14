@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # credits to original script go to galister#4182
 

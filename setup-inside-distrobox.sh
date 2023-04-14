@@ -1,6 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 source ./links.sh
+
+GPU="$(cat specs.conf | head -1 | tail -2)"
+AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
 
 GREEN='\033[0;32m'
 RED='\033[0;31m'
@@ -25,6 +28,8 @@ function cleanup_alvr(){
    done
 }
 
+echog "Found $GPU gpu and $AUDIO_SYSTEM."
+
 # Setting up arch
 echog "Setting up repositories"
 echo "Color" | sudo tee -a /etc/pacman.conf
@@ -34,8 +39,30 @@ echog "Setting up locales"
 echo "en_US.UTC-8" | sudo tee -a /etc/locale.conf
 echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
 sudo locale-gen
-echog "Installing steam and additional 32 bit packages."
-sudo pacman -Syu steam lib32-vulkan-radeon lib32-pipewire --noconfirm
+
+echog "Installing steam, audio and additional 32 bit packages."
+if [[ "$GPU" == "amd" ]]; then
+   sudo pacman -Syu lib32-vulkan-radeon --noconfirm
+elif [[ "$GPU" == "nvidia" ]]; then
+   sudo pacman -Syu lib32-nvidia-utils --noconfirm
+   git clone https://aur.archlinux.org/downgrade.git
+   cd downgrade.git
+   makepkg -si
+   cd ..
+   NVIDIA_UTILS=$(pacman -Q "nvidia-utils")
+   echor "Please make sure that nvidia driver versions are matching from the host and inside this container. If they don't match, write y to launch downgrader to downgrade container drivers. If you don't match those versions (be it after upgrading host drivers, or just not paying attention), graphical applications inside this container might not work. Currently installed driver version inside container is $NVIDIA_UTILS."
+   read -r DO_DOWNGRADE
+   if [[ "$DO_DOWNGRADE" == "y" ]]; then
+      downgrade lib32-nvidia-utils nvidia-utils
+   fi
+fi
+if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
+   sudo pacman -Syu lib32-pipewire pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber --noconfirm
+elif [[ "$AUDIO_SYSTEM" == "pulseaudio" ]]; then
+   sudo pacman -Syu pulseaudio pusleaudio-alsa --noconfirm
+fi
+
+sudo pacman -Syu steam --noconfirm
 echog "Exporting steam to host as an application. It will show up as Steam (Runtime) (on arch-alvr). "
 distrobox-export --app steam
 

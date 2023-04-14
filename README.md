@@ -45,5 +45,3 @@ Open terminal in this repository folder and do:
 ## Additional info
 
 Highly recommend using CoreCtrl and setting settings to VR profile, as well as cpu to performance profile (if it's a Ryzen cpu). Without it, you might have serious shutters/wobbles at random point while playing.
-
-

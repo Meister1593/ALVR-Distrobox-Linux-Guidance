@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "Latest known working version for patching: 1.25.7"
 
