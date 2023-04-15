@@ -9,7 +9,7 @@ installation/./$ALVR_FILENAME --appimage-extract
 mv squashfs-root installation/alvr
 
 echo "Deleting existing wlxoverlay"
-rm installation/$WLXOVERLAY_FILENAME
+rm installation/WlxOverlay-v*-x86_64.AppImage
 wget -q --show-progress -P installation/ "$WLXOVERLAY_LINK"
 chmod +x "installation/$WLXOVERLAY_FILENAME"
 
