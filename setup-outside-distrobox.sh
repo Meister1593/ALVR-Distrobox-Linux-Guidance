@@ -59,7 +59,7 @@ function phase2_distrobox_cotainer_creation() {
    if [[ "$GPU" == "amd" ]]; then
       echo "amd" | tee -a specs.conf
       distrobox-assemble create -f ../distrobox-amd.ini
-   elif [[ "$GPU" == "nvidia" ]]; then
+   elif [[ "$GPU" == "nvidia*" ]]; then
       echo "nvidia" | tee -a specs.conf
       distrobox-assemble create -f ../distrobox-nvidia.ini
    else
