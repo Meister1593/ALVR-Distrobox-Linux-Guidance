@@ -1,5 +1,9 @@
 #!/bin/bash
 
+podman stop arch-alvr
+
+distrobox-rm arch-alvr
+
 sed -i '/#alvr-distrobox/d' ~/.bashrc
 
 echo "Removed PATH appends in ~/.bashrc"
