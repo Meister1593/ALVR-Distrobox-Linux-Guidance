@@ -2,17 +2,6 @@
 
 source ./links.sh
 
-cd installation
-
-GPU="$(cat specs.conf | head -1 | tail -2)"
-GPU_VERSION=''
-if [[ "$GPU" == nvidia* ]]; then
-   GPU_VERSION=$(echo $GPU | cut -d' ' -f2)
-   GPU=$(echo $GPU | cut -d' ' -f1)
-fi
-
-AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
-
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
@@ -24,6 +13,17 @@ function echog(){
 function echor(){
    echo -e "${RED}${STEP_INDEX}${NC} : ${RED}$1${NC}"
 }
+
+cd installation
+
+GPU="$(cat specs.conf | head -1 | tail -2)"
+GPU_VERSION=''
+if [[ "$GPU" == nvidia* ]]; then
+   GPU_VERSION=$(echo $GPU | cut -d' ' -f2)
+   GPU=$(echo $GPU | cut -d' ' -f1)
+fi
+
+AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
 
 function cleanup_alvr(){
    echog "Cleaning up ALVR"
@@ -146,4 +146,5 @@ echog "This script auto-starts steamvr, which then starts up alvr driver and aft
 echog "Before launching start-vr.sh script, please open distrobox steam first."
 echog "To close vr, press ctrl+c in terminal where start-vr.sh script is running. It will automatically close alvr and steamvr."
 echor "Very important: to prevent game from looking like it's severily lagging, please turn on legacy reprojection in per-app video settings in steamvr. This improves experience drastically."
+echor "To open container next time, use 'distrobox-enter arch-alvr' "
 echog "Tip: to prevent double-restart due to how client resets it's settings, you can change settings and then put headset to sleep, and power back. This restarts client and server, and prevents double restart."

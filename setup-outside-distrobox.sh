@@ -49,8 +49,9 @@ function phase1_distrobox_podman_install() {
    if [[ -z "$(which podman)" ]]; then
       echo "export PATH=$PWD/podman/bin:\$PATH #alvr-distrobox" | tee -a ~/.bashrc
    fi
+   echo "xhost +si:localuser:\$USER #alvr-distrobox" | tee -a ~/.xinitrc # for xorg setups, untested whenever it works with xinitrc
    
-   echo "Please re-enter your terminal application and re-run this script to continue in next step."
+   echo "Please relog from your system and re-run this script in new terminal window to continue in next step. This ensures that distrobox can be used from both new terminals and from your desktop."
 }
 
 function phase2_distrobox_cotainer_creation() {
