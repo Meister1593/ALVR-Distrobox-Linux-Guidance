@@ -2,6 +2,9 @@
 
 # credits to original script go to galister#4182
 
+# go to installation folder in case we aren't already there
+cd installation
+
 STEAMVR_PATH="$HOME/.local/share/Steam/steamapps/common/SteamVR"
 LATEST_MIC_ID=-1
 

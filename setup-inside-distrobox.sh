@@ -102,7 +102,8 @@ mv squashfs-root alvr
 echog "ALVR and dashboard now launch and when it does that, skip setup (X button on right up corner)."
 echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu."
 echog "In ALVR Dashboard settings at left side, scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
-echog "You can also untick 'Open setup wizard' to. After you did that, press enter here"
+echog "You can also untick 'Open setup wizard' too. After you did that go to Installation tab at left and press 'Register ALVR driver'."
+echog "After you have done with this, press enter here."
 read
 echog "From this point on, alvr will automatically start with SteamVR. But it's still quite broken mechanism so we need to use additional script for auto-restart to work."
 echog "Don't close ALVR yet."
