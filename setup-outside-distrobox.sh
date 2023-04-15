@@ -55,21 +55,20 @@ function phase1_distrobox_podman_install() {
 }
 
 function phase2_distrobox_cotainer_creation() {
-   cd installation
    if [[ "$GPU" == "amd" ]]; then
-      echo "amd" | tee -a specs.conf
-      distrobox-assemble create -f ../distrobox-amd.ini
+      echo "amd" | tee -a ./installation/specs.conf
+      distrobox-assemble create -f ./distrobox-amd.ini
    elif [[ "$GPU" == nvidia* ]]; then
-      echo "$GPU" | tee -a specs.conf
-      distrobox-assemble create -f ../distrobox-nvidia.ini
+      echo "$GPU" | tee -a ./installation/specs.conf
+      distrobox-assemble create -f ./distrobox-nvidia.ini
    else
       echo "Intel is not supported yet."
       exit 0
    fi
    if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
-      echo "pipewire" | tee -a specs.conf
+      echo "pipewire" | tee -a ./installation/specs.conf
    elif [[ "$AUDIO_SYSTEM" == "pulse" ]]; then
-      echo "pulse" | tee -a specs.conf
+      echo "pulse" | tee -a ./installation/specs.conf
    else
       echo "Unsupported audio system"
       exit 0
