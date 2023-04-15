@@ -44,8 +44,11 @@ echo "Color" | sudo tee -a /etc/pacman.conf
 echo "[multilib]" | sudo tee -a /etc/pacman.conf
 echo "Include = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf
 echog "Setting up locales"
-echo "en_US.UTC-8" | sudo tee -a /etc/locale.conf
+echo "LANG=en_US.UTF-8" | sudo tee /etc/locale.conf
+echo "LC_ALL=en_US.UTF-8" | sudo tee /etc/locale.conf
 echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
+echo "export LANG=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
+echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 sudo locale-gen
 
 echog "Installing steam, audio and additional 32 bit packages."
@@ -149,3 +152,4 @@ echog "To close vr, press ctrl+c in terminal where start-vr.sh script is running
 echor "Very important: to prevent game from looking like it's severily lagging, please turn on legacy reprojection in per-app video settings in steamvr. This improves experience drastically."
 echor "To open container next time, use 'distrobox-enter arch-alvr' "
 echog "Tip: to prevent double-restart due to how client resets it's settings, you can change settings and then put headset to sleep, and power back. This restarts client and server, and prevents double restart."
+echor "Please re-enter the container and restart steam to apply locale to container apps."
