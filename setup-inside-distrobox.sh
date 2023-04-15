@@ -6,7 +6,7 @@ cd installation
 
 GPU="$(cat specs.conf | head -1 | tail -2)"
 GPU_VERSION=''
-if [[ "$GPU" == "nvidia*" ]]; then
+if [[ "$GPU" == nvidia* ]]; then
    GPU_VERSION=$(echo $GPU | cut -d' ' -f2)
    GPU=$(echo $GPU | cut -d' ' -f1)
 fi
