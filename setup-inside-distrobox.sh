@@ -5,6 +5,12 @@ source ./links.sh
 cd installation
 
 GPU="$(cat specs.conf | head -1 | tail -2)"
+GPU_VERSION=''
+if [[ "$GPU" == "nvidia*" ]]; then
+   GPU_VERSION=$(echo $GPU | cut -d' ' -f2)
+   GPU=$(echo $GPU | cut -d' ' -f1)
+fi
+
 AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
 
 GREEN='\033[0;32m'
@@ -48,14 +54,19 @@ if [[ "$GPU" == "amd" ]]; then
 elif [[ "$GPU" == "nvidia" ]]; then
    sudo pacman -Syu lib32-nvidia-utils --noconfirm
    git clone https://aur.archlinux.org/downgrade.git
-   cd downgrade.git
+   cd downgrade
    makepkg -si
    cd ..
-   NVIDIA_UTILS=$(pacman -Q "nvidia-utils")
-   echor "Please make sure that nvidia driver versions are matching from the host and inside this container. If they don't match, write y to launch downgrader to downgrade container drivers. If you don't match those versions (be it after upgrading host drivers, or just not paying attention), graphical applications inside this container might not work. Currently installed driver version inside container is $NVIDIA_UTILS."
-   read -r DO_DOWNGRADE
-   if [[ "$DO_DOWNGRADE" == "y" ]]; then
+   NVIDIA_UTILS_VERSION=$(pacman -Q "nvidia-utils" | cut -d' ' -f2)
+   NVIDIA_UTILS_VERSION=${NVIDIA_UTILS_VERSION%-*}
+   echog "Host drivers version: $GPU_VERSION"
+   echog "Distrobox drivers version: $NVIDIA_UTILS_VERSION"
+   if [[ "$GPU_VERSION" != "$NVIDIA_UTILS_VERSION" ]]; then
+      echor "Your host drivers are not the same as in distrobox, meaning that you probably need to downgrade them inside distrobox. Please both packages with same version as on host."
       downgrade lib32-nvidia-utils nvidia-utils
+      echor "Make sure that driver versions are the same at all times, so when you update host drivers, make sure to update drivers (sudo pacman -Syu) in distrobox too."
+   else
+      echor "Your driver versions match from host and distrobox! Installation continues."
    fi
 fi
 if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
@@ -130,7 +141,7 @@ STEP_INDEX=$((STEP_INDEX + 1))
 
 # post messages
 echog "From that point on, ALVR should be installed and WlxOverlay should be working. Please refer to https://github.com/galister/WlxOverlay/wiki/Getting-Started to familiarise with controls."
-echog "To start alvr now you need to use start-vr.sh script from this repository to allow for painless auto-restart (it's not perfect, but still way better than not using it)"
+echor "To start alvr now you need to use start-vr.sh script from this repository from inside distrobox container to allow for painless auto-restart (it's not perfect, but still way better than not using it)"
 echog "This script auto-starts steamvr, which then starts up alvr driver and after some time dashboard automatically opens. When restart happens, it cleans up dashboard and re-launches it again later."
 echog "Before launching start-vr.sh script, please open distrobox steam first."
 echog "To close vr, press ctrl+c in terminal where start-vr.sh script is running. It will automatically close alvr and steamvr."

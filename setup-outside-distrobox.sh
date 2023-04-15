@@ -1,39 +1,31 @@
 #!/bin/bash
 
-GPU=$(lspci | grep -i vga)
-
-if [[ -n "$(echo $GPU | grep -i amd)" ]]; then
-   GPU='amd'
-elif [[ -n "$(echo $GPU | grep -i nvidia)" ]]; then
-   GPU='nvidia'
-else
-   echo "Intel is not supported yet."
-   exit 0
-fi
-
-if [[ -e "installation" ]]; then
-   cd installation
-   if [[ "$GPU" == "amd" ]]; then
-      echo "amd" | tee -a specs.conf
-      distrobox-assemble create -f ../distrobox-amd.ini
-   elif [[ "$GPU" == "nvidia" ]]; then
-      echo "nvidia" | tee -a specs.conf
-      distrobox-assemble create -f ../distrobox-nvidia.ini
+function detect_gpu() {
+   local gpu=$(lspci | grep -i vga)
+   if [[ -n "$(echo $gpu | grep -i amd)" ]]; then
+      echo 'amd'
+   elif [[ -n "$(echo $gpu | grep -i nvidia)" ]]; then
+      local driver_version=$(cat /proc/driver/nvidia/version | head -1 | tail -2 | tr -s ' ' | cut -d' ' -f8)
+      echo "nvidia $driver_version"
    else
-      echo "Intel is not supported yet."
-      exit 0
+      echo 'intel'
    fi
+}
+
+function detect_audio() {
+   local audio_system='none'
    if [[ -n "$(pgrep pipewire)" ]]; then
-      echo "pipewire" | tee -a specs.conf
+      audio_system='pipewire'
    elif [[ -n "$(pgrep pulseaudio)" ]]; then
-      echo "pulse" | tee -a specs.conf
+      audio_system='pulse'
    else
-      echo "Unsupported audio system"
-      exit 0
+      audio_system='none'
    fi
-   
-   distrobox-enter arch-alvr
-else
+}
+GPU=$(detect_gpu)
+AUDIO_SYSTEM=$(detect_audio)
+
+function phase1_distrobox_podman_install() {
    mkdir installation
    cd installation
    
@@ -60,4 +52,34 @@ else
    fi
    
    echo "Please re-enter your terminal application and re-run this script to continue in next step."
+}
+
+function phase2_distrobox_cotainer_creation() {
+   cd installation
+   if [[ "$GPU" == "amd" ]]; then
+      echo "amd" | tee -a specs.conf
+      distrobox-assemble create -f ../distrobox-amd.ini
+   elif [[ "$GPU" == "nvidia" ]]; then
+      echo "nvidia" | tee -a specs.conf
+      distrobox-assemble create -f ../distrobox-nvidia.ini
+   else
+      echo "Intel is not supported yet."
+      exit 0
+   fi
+   if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
+      echo "pipewire" | tee -a specs.conf
+   elif [[ "$AUDIO_SYSTEM" == "pulse" ]]; then
+      echo "pulse" | tee -a specs.conf
+   else
+      echo "Unsupported audio system"
+      exit 0
+   fi
+   
+   distrobox-enter arch-alvr
+}
+
+if [[ -e "installation" ]]; then
+   phase2_distrobox_cotainer_creation
+else
+   phase1_distrobox_podman_install
 fi
