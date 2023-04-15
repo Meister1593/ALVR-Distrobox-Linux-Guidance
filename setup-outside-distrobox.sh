@@ -13,13 +13,12 @@ function detect_gpu() {
 }
 
 function detect_audio() {
-   local audio_system='none'
    if [[ -n "$(pgrep pipewire)" ]]; then
-      audio_system='pipewire'
+      echo 'pipewire'
    elif [[ -n "$(pgrep pulseaudio)" ]]; then
-      audio_system='pulse'
+      echo 'pulse'
    else
-      audio_system='none'
+      echo 'none'
    fi
 }
 GPU=$(detect_gpu)
