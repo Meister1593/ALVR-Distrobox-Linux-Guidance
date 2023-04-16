@@ -24,9 +24,9 @@ Open terminal in this repository folder and do:
 
 1. `./setup-outside-distrobox.sh`
    
-    This prepares distrobox, podman if they are needed to be installed and used. Follow steps from that script.
+    This prepares distrobox, podman if they are needed to be installed and used, as well as basic installation of packages inside distrobox. Follow steps from that script.
 
-2. After entering container, you need to launch main guidance script with `./setup-inside-distrobox.sh`. From there, pay close attention to green text and follow it.
+2. When you're done with `./setup-outside-distrobox.sh`, it will automatically enter container and you need to launch main guidance script with `./setup-inside-distrobox.sh`. From there, pay close attention to green, and especially red text and follow it.
 
 ## Additional info
 

@@ -55,7 +55,7 @@ echog "Installing steam, audio and additional 32 bit packages."
 if [[ "$GPU" == "amd" ]]; then
    sudo pacman -Syu lib32-vulkan-radeon --noconfirm
 elif [[ "$GPU" == "nvidia" ]]; then
-   sudo pacman -Syu lib32-nvidia-utils --noconfirm
+   sudo pacman -Syu lib32-nvidia-utils cuda --noconfirm
    git clone https://aur.archlinux.org/downgrade.git
    cd downgrade
    makepkg -si
