@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./helper_functions.sh
+
 function detect_gpu() {
    local gpu=$(lspci | grep -i vga)
    if [[ -n "$(echo $gpu | grep -i amd)" ]]; then
@@ -37,11 +39,11 @@ function phase1_distrobox_podman_install() {
    cd ..
    
    if [[ -z "$(which podman)" ]]; then
-      echo "Could not find podman in system path, installing locally"
+      echog "Could not find podman in system path, installing locally"
       mkdir podman
       curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix $PWD/podman
    else
-     echo "Found Podman installation on your system, using that"
+     echog "Found Podman installation on your system, using that"
    fi
    
    # Appending paths for distrobox and podman to bashrc
@@ -51,7 +53,7 @@ function phase1_distrobox_podman_install() {
    fi
    echo "xhost +si:localuser:\$USER #alvr-distrobox" | tee -a ~/.bashrc # for xorg setups, doesn't work in xinitrc, need to find better place
    
-   echo "Please relog from your system and re-run this script in new terminal window to continue in next step. This ensures that distrobox can be used from both new terminals and from your desktop."
+   echor "Please relog from your system and re-run this script in new terminal window from the same folder to continue in next step. This ensures that distrobox can be used from both new terminals and from your desktop."
 }
 
 function phase2_distrobox_cotainer_creation() {
@@ -62,16 +64,16 @@ function phase2_distrobox_cotainer_creation() {
       echo "$GPU" | tee -a ./installation/specs.conf
       distrobox-assemble create -f ./distrobox-nvidia.ini
    else
-      echo "Intel is not supported yet."
-      exit 0
+      echor "Intel is not supported yet."
+      exit 1
    fi
    if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
       echo "pipewire" | tee -a ./installation/specs.conf
    elif [[ "$AUDIO_SYSTEM" == "pulse" ]]; then
       echo "pulse" | tee -a ./installation/specs.conf
    else
-      echo "Unsupported audio system"
-      exit 0
+      echor "Unsupported audio system. Please report this issue."
+      exit 1
    fi
    
    distrobox-enter arch-alvr

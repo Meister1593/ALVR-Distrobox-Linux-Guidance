@@ -1,18 +1,9 @@
 #!/bin/bash
 
 source ./links.sh
+source ./helper_functions.sh
 
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
 STEP_INDEX=1
-
-function echog(){
-   echo -e "${RED}${STEP_INDEX}${NC} : ${GREEN}$1${NC}"
-}
-function echor(){
-   echo -e "${RED}${STEP_INDEX}${NC} : ${RED}$1${NC}"
-}
 
 cd installation
 
@@ -24,17 +15,6 @@ if [[ "$GPU" == nvidia* ]]; then
 fi
 
 AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
-
-function cleanup_alvr(){
-   echog "Cleaning up ALVR"
-   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
-     pkill -f $vrp
-   done
-   sleep 3
-   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
-     pkill -f -9 $vrp
-   done
-}
 
 echog "Found $GPU gpu and $AUDIO_SYSTEM."
 
@@ -82,7 +62,7 @@ sudo pacman -Syu steam --noconfirm
 echog "Exporting steam to host as an application. It will show up as Steam (Runtime) (on arch-alvr). "
 distrobox-export --app steam
 
-STEP_INDEX=$((STEP_INDEX + 1))
+STEP_INDEX=2
 
 # Ask user for installing steamvr
 echog "Installed base packages and Steam. Please log into your steam account and install SteamVR."
@@ -92,7 +72,7 @@ read
 echog "Now launch SteamVR once, close it and press enter here to continue again."
 read
 
-STEP_INDEX=$((STEP_INDEX + 1))
+STEP_INDEX=3
 
 # installing alvr
 echog "Installing alvr"
@@ -116,7 +96,7 @@ read
 echog "From this point on, alvr will automatically start with SteamVR. But it's still quite broken mechanism so we need to use additional script for auto-restart to work."
 echog "Don't close ALVR yet."
 
-STEP_INDEX=$((STEP_INDEX + 1))
+STEP_INDEX=4
 
 # installing wlxoverlay
 echog "Since SteamVR overlay is sort-of broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland."
@@ -134,7 +114,7 @@ fi
 echog "WlxOverlay adds itself to auto-startup so you don't need to do anything with it to make it autostart. Press enter to continue."
 read
 
-STEP_INDEX=$((STEP_INDEX + 1))
+STEP_INDEX=5
 
 # patching steamvr
 echog "To prevent issues with SteamVR spamming with messages into it's own web interface, i created patcher that can prevent this spam. Without this, you will have issues with opening Video Setttings per app, bindings, etc."
@@ -146,7 +126,7 @@ fi
 
 cleanup_alvr
 
-STEP_INDEX=$((STEP_INDEX + 1))
+STEP_INDEX=6
 
 # post messages
 echog "From that point on, ALVR should be installed and WlxOverlay should be working. Please refer to https://github.com/galister/WlxOverlay/wiki/Getting-Started to familiarise with controls."
