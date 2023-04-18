@@ -5,16 +5,16 @@ source ./helper_functions.sh
 
 STEP_INDEX=1
 
-cd installation
+cd installation || echog "Already in installation folder"
 
-GPU="$(cat specs.conf | head -1 | tail -2)"
+GPU="$(< specs.conf head -1 | tail -2)"
 GPU_VERSION=''
 if [[ "$GPU" == nvidia* ]]; then
    GPU_VERSION=$(echo $GPU | cut -d' ' -f2)
    GPU=$(echo $GPU | cut -d' ' -f1)
 fi
 
-AUDIO_SYSTEM="$(cat specs.conf | head -2 | tail -1)"
+AUDIO_SYSTEM="$(< specs.conf head -2 | tail -1)"
 
 echog "Found $GPU gpu and $AUDIO_SYSTEM."
 
@@ -77,7 +77,7 @@ STEP_INDEX=3
 # installing alvr
 echog "Installing alvr"
 echog "This installation script assumes that you will register alvr as a driver further, so it needs to extract appimage."
-wget -q --show-progress $ALVR_LINK
+wget -q --show-progress $ALVR_LINK $ALVR_FILENAME
 chmod +x $ALVR_FILENAME
 ./$ALVR_FILENAME --appimage-extract &> /dev/null
 mv squashfs-root alvr
@@ -100,7 +100,7 @@ STEP_INDEX=4
 
 # installing wlxoverlay
 echog "Since SteamVR overlay is sort-of broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland."
-wget -q --show-progress $WLXOVERLAY_LINK
+wget -q --show-progress $WLXOVERLAY_LINK $WLXOVERLAY_FILENAME
 chmod +x $WLXOVERLAY_FILENAME
 if [ "$WAYLAND_DISPLAY" != "" ]; then
    echog "If you're on wayland (and not on wlroots-based compositor), it will ask for display to choose. Choose each displays sequentially if you have more than 1."

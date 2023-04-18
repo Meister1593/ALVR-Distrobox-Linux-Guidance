@@ -3,11 +3,13 @@
 source ./helper_functions.sh
 
 function detect_gpu() {
-   local gpu=$(lspci | grep -i vga)
-   if [[ -n "$(echo $gpu | grep -i amd)" ]]; then
+   local gpu
+   gpu=$(lspci | grep -i vga)
+   if [[ -n "$(echo "$gpu" | grep -i amd)" ]]; then
       echo 'amd'
-   elif [[ -n "$(echo $gpu | grep -i nvidia)" ]]; then
-      local driver_version=$(cat /proc/driver/nvidia/version | head -1 | tail -2 | tr -s ' ' | cut -d' ' -f8)
+   elif [[ -n "$(echo "$gpu" | grep -i nvidia)" ]]; then
+      local driver_version
+      driver_version=$(< /proc/driver/nvidia/version head -1 | tail -2 | tr -s ' ' | cut -d' ' -f8)
       echo "nvidia $driver_version"
    else
       echo 'intel'
@@ -34,14 +36,15 @@ function phase1_distrobox_podman_install() {
    # installing distrobox from git because script installs latest release (not what we want)
    git clone https://github.com/89luca89/distrobox.git distrobox-git
    mkdir distrobox
-   cd distrobox-git
+   (
+   cd distrobox-git || exit
    ./install --prefix ../distrobox
-   cd ..
+   )
    
    if [[ -z "$(which podman)" ]]; then
       echog "Could not find podman in system path, installing locally"
       mkdir podman
-      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix $PWD/podman
+      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD/podman"
    else
      echog "Found Podman installation on your system, using that"
    fi

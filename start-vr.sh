@@ -2,8 +2,10 @@
 
 # credits to original script go to galister#4182
 
+source ./helper_functions.sh
+
 # go to installation folder in case we aren't already there
-cd installation
+cd installation || echog "Already at needed folder"
 
 STEAMVR_PATH="$HOME/.local/share/Steam/steamapps/common/SteamVR"
 LATEST_MIC_ID=-1
@@ -16,29 +18,15 @@ run_additional_stuff() {
 
 run_vrstartup() {
   setup_mic
-  $STEAMVR_PATH/bin/vrstartup.sh > /dev/null 2>&1 &
+  "$STEAMVR_PATH/bin/vrstartup.sh" > /dev/null 2>&1 &
 }
-
-cleanup() {
-   unload_mic
-   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
-     pkill -f $vrp
-   done
-
-   sleep 3
-
-   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
-     pkill -f -9 $vrp
-   done
-}
-
 
 function setup_mic(){
    LATEST_MIC_ID=$(pactl load-module module-null-sink sink_name=VirtMic)
 }
 
 function unload_mic(){
-   pactl unload-module $LATEST_MIC_ID
+   pactl unload-module "$LATEST_MIC_ID"
 }
 
 if pidof vrmonitor >/dev/null; then
@@ -46,13 +34,13 @@ if pidof vrmonitor >/dev/null; then
   run_additional_stuff
 fi
 
-trap 'echo SIGINT!; cleanup; exit 0' INT
-trap 'echo SIGTERM!; cleanup; exit 0' TERM
+trap 'echo SIGINT!; cleanup_alvr; exit 0' INT
+trap 'echo SIGTERM!; cleanup_alvr; exit 0' TERM
 
 while true; do 
   
   if ! pidof vrmonitor >/dev/null; then
-    cleanup
+    cleanup_alvr
 
     run_vrstartup
 
