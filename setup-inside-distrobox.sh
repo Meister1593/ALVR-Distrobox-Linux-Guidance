@@ -118,7 +118,7 @@ STEP_INDEX=5
 
 # patching steamvr
 echog "To prevent issues with SteamVR spamming with messages into it's own web interface, i created patcher that can prevent this spam. Without this, you will have issues with opening Video Setttings per app, bindings, etc."
-echog "If you're okay with patching (or have compatible SteamVR version), you can type y to patch SteamVR. Otherwise press enter to skip"
+echog "If you're okay with patching (or have compatible SteamVR version), you can type y and press enter to patch SteamVR. Otherwise just press enter to skip"
 read -r DO_PATCH
 if [[ "$DO_PATCH" == "y" ]]; then
    ../patch_bindings_spam.sh "$HOME/.steam/steam/steamapps/common/SteamVR"

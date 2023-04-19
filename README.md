@@ -18,6 +18,8 @@
 
 8. If you're already using Distrobox, this will override your user PATH variable and use distrobox from this repository instead of your currently installed. This by itself isn't a problem for using distrobox containers. but it may be crumblesome in case you want to remove it using uninstaler, as it will also remove all previous desktop icons you have.
 
+9. KDE Nvidia Wayland users might encounter SteamVR 307 crash, which would mean that they have to use X11 session for VR unfortunately. Installation using these scripts can be still completed, even with those errors, but vr still have to be used from X11.
+
 ## Installing alvr in distrobox
 
 After you have installed Podman and Distrobox in your system, you can begin installing environment and ALVR with it.
@@ -32,7 +34,7 @@ Open terminal in this repository folder and do:
 
 ## Updating ALVR & WlxOverlay
 
-In case there was an update for ALVR or WlxOverlay, you can manually update links in `links.sh` file and run `./update-vr-apps.sh`. For automatic update, usually someone from maintainers have to update `links.sh` and then after pulling new versionm you just run `./update-vr-apps.sh`.
+In case there was an update for ALVR or WlxOverlay, you can manually update links in `links.sh` file and run `./update-vr-apps.sh`. For automatic update, usually someone from maintainers have to update `links.sh` and then after pulling new version you just run `./update-vr-apps.sh`.
 
 For the moment, this process is semi-automaitc/manual to ensure that end user won't have any possible issue with specific alvr/wlxoverlay version when the first-time installation has occurred.
 
