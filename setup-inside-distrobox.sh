@@ -77,7 +77,7 @@ STEP_INDEX=3
 # installing alvr
 echog "Installing alvr"
 echog "This installation script assumes that you will register alvr as a driver further, so it needs to extract appimage."
-wget -q --show-progress $ALVR_LINK $ALVR_FILENAME
+wget -q --show-progress $ALVR_LINK
 chmod +x $ALVR_FILENAME
 ./$ALVR_FILENAME --appimage-extract &> /dev/null
 mv squashfs-root alvr
@@ -100,7 +100,7 @@ STEP_INDEX=4
 
 # installing wlxoverlay
 echog "Since SteamVR overlay is sort-of broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland."
-wget -q --show-progress $WLXOVERLAY_LINK $WLXOVERLAY_FILENAME
+wget -q --show-progress $WLXOVERLAY_LINK
 chmod +x $WLXOVERLAY_FILENAME
 if [ "$WAYLAND_DISPLAY" != "" ]; then
    echog "If you're on wayland (and not on wlroots-based compositor), it will ask for display to choose. Choose each displays sequentially if you have more than 1."
