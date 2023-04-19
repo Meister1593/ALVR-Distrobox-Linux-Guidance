@@ -12,7 +12,7 @@ LATEST_MIC_ID=-1
 
 # add your tools here
 run_additional_stuff() {
-   echo Starting additional stuff
+   echog Starting additional stuff
    ./alvr/usr/bin/alvr_dashboard &
 }
 
