@@ -46,7 +46,8 @@ elif [[ "$GPU" == "nvidia" ]]; then
    echog "Distrobox drivers version: $NVIDIA_UTILS_VERSION"
    if [[ "$GPU_VERSION" != "$NVIDIA_UTILS_VERSION" ]]; then
       echor "Your host drivers are not the same as in distrobox, meaning that you probably need to downgrade them inside distrobox. Please both packages with same version as on host."
-      downgrade lib32-nvidia-utils nvidia-utils
+      echor "If this is a mistake, you can just choose the same versions and report this as a bug (in parsing nvidia version))"
+      sudo downgrade lib32-nvidia-utils nvidia-utils
       echor "Make sure that driver versions are the same at all times, so when you update host drivers, make sure to update drivers (sudo pacman -Syu) in distrobox too."
    else
       echor "Your driver versions match from host and distrobox! Installation continues."

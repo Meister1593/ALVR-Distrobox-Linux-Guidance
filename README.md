@@ -18,7 +18,7 @@
 
 8. If you're already using Distrobox, this will override your user PATH variable and use distrobox from this repository instead of your currently installed. This by itself isn't a problem for using distrobox containers. but it may be crumblesome in case you want to remove it using uninstaler, as it will also remove all previous desktop icons you have.
 
-9. KDE Nvidia Wayland users might encounter SteamVR 307 crash, which would mean that they have to use X11 session for VR unfortunately. Installation using these scripts can be still completed, even with those errors, but vr still have to be used from X11.
+9. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause.
 
 ## Installing alvr in distrobox
 
