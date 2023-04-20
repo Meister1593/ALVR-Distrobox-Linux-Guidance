@@ -41,6 +41,7 @@ while true; do
   
   if ! pidof vrmonitor >/dev/null; then
     cleanup_alvr
+    unload_mic
 
     run_vrstartup
 
