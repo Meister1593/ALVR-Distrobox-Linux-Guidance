@@ -35,12 +35,12 @@ echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 sudo locale-gen
 
 echog "Installing packages for base functionality."
-sudo pacman -Syu git vim base-devel noto-fonts xdg-user-dirs fuse libx264 sdl2 libva-utils --noconfirm
+sudo pacman -Syu git vim base-devel noto-fonts xdg-user-dirs fuse libx264 sdl2 libva-utils --noconfirm || exit 1
 echog "Installing steam, audio and driver packages."
 if [[ "$GPU" == "amd" ]]; then
-   sudo pacman -Syu libva-mesa-driver vulkan-radeon lib32-vulkan-radeon lib32-libva-mesa-driver --noconfirm
+   sudo pacman -Syu libva-mesa-driver vulkan-radeon lib32-vulkan-radeon lib32-libva-mesa-driver --noconfirm || exit 1
 elif [[ "$GPU" == "nvidia" ]]; then
-   sudo pacman -Syu nvidia-utils lib32-nvidia-utils cuda --noconfirm
+   sudo pacman -Syu nvidia-utils lib32-nvidia-utils cuda --noconfirm || exit 1
 
    # Installing downgrade in case needed for nvidia users
    git clone https://aur.archlinux.org/downgrade.git
@@ -61,11 +61,16 @@ elif [[ "$GPU" == "nvidia" ]]; then
    else
       echor "Your driver versions match from host and distrobox! Installation continues."
    fi
+else
+   echor "Couldn't determine gpu with name: $GPU ($GPU_VERSION), exiting!"
+   exit 1
 fi
 if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
-   sudo pacman -Syu lib32-pipewire pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber --noconfirm
+   sudo pacman -Syu lib32-pipewire pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber --noconfirm || exit 1
 elif [[ "$AUDIO_SYSTEM" == "pulseaudio" ]]; then
-   sudo pacman -Syu pulseaudio pusleaudio-alsa --noconfirm
+   sudo pacman -Syu pulseaudio pusleaudio-alsa --noconfirm || exit 1
+else
+   echor "Couldn't determine audio system: $AUDIO_SYSTEM, you may have issues with audio!"
 fi
 
 sudo pacman -Syu steam --noconfirm

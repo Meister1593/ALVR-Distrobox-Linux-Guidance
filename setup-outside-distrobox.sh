@@ -68,12 +68,9 @@ function phase2_distrobox_cotainer_creation() {
    AUDIO_SYSTEM=$(detect_audio)
 
    source ./setup-env.sh
-   if [[ "$GPU" == "amd" ]]; then
-      echo "amd" | tee -a ./installation/specs.conf
-      distrobox-assemble create -f ./distrobox-amd.ini
-   elif [[ "$GPU" == nvidia* ]]; then
+   if [[ "$GPU" == "amd" ]] || [[ "$GPU" == nvidia* ]]; then
       echo "$GPU" | tee -a ./installation/specs.conf
-      distrobox-assemble create -f ./distrobox-nvidia.ini
+      distrobox-assemble create
    else
       echor "Intel is not supported yet."
       exit 1
