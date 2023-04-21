@@ -1,22 +1,25 @@
 #!/bin/bash
 
 source ./links.sh
-source ./helper_functions.sh
+source ./helper-functions.sh
+
+echor "Phase 3"
 
 STEP_INDEX=1
 
 cd installation || echog "Already in installation folder"
 
+# Get current gpu and version in case if it's nvidia from configuration
 GPU="$(< specs.conf head -1 | tail -2)"
 GPU_VERSION=''
 if [[ "$GPU" == nvidia* ]]; then
-   GPU_VERSION=$(echo $GPU | cut -d' ' -f2)
-   GPU=$(echo $GPU | cut -d' ' -f1)
+   GPU_VERSION=$(echo "$GPU" | cut -d' ' -f2)
+   GPU=$(echo "$GPU" | cut -d' ' -f1)
 fi
 
 AUDIO_SYSTEM="$(< specs.conf head -2 | tail -1)"
 
-echog "Found $GPU gpu and $AUDIO_SYSTEM."
+echog "Found $GPU gpu and $AUDIO_SYSTEM"
 
 # Setting up arch
 echog "Setting up repositories"
@@ -31,15 +34,19 @@ echo "export LANG=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 sudo locale-gen
 
-echog "Installing steam, audio and additional 32 bit packages."
+echog "Installing packages for base functionality."
+sudo pacman -Syu git vim base-devel noto-fonts xdg-user-dirs fuse libx264 sdl2 libva-utils
+echog "Installing steam, audio and driver packages."
 if [[ "$GPU" == "amd" ]]; then
-   sudo pacman -Syu lib32-vulkan-radeon --noconfirm
+   sudo pacman -Syu libva-mesa-driver vulkan-radeon lib32-vulkan-radeon lib32-libva-mesa-driver --noconfirm
 elif [[ "$GPU" == "nvidia" ]]; then
-   sudo pacman -Syu lib32-nvidia-utils cuda --noconfirm
+   sudo pacman -Syu nvidia-utils lib32-nvidia-utils cuda --noconfirm
    git clone https://aur.archlinux.org/downgrade.git
-   cd downgrade
+   (
+   cd downgrade || exit
    makepkg -si
-   cd ..
+   )
+   
    NVIDIA_UTILS_VERSION=$(pacman -Q "nvidia-utils" | cut -d' ' -f2)
    NVIDIA_UTILS_VERSION=${NVIDIA_UTILS_VERSION%-*}
    echog "Host drivers version: $GPU_VERSION"
@@ -78,9 +85,9 @@ STEP_INDEX=3
 # installing alvr
 echog "Installing alvr"
 echog "This installation script assumes that you will register alvr as a driver further, so it needs to extract appimage."
-wget -q --show-progress $ALVR_LINK
-chmod +x $ALVR_FILENAME
-./$ALVR_FILENAME --appimage-extract &> /dev/null
+wget -q --show-progress "$ALVR_LINK"
+chmod +x "$ALVR_FILENAME"
+./"$ALVR_FILENAME" --appimage-extract &> /dev/null
 mv squashfs-root alvr
 ./alvr/usr/bin/alvr_dashboard &> /dev/null &
 echog "ALVR and dashboard now launch and when it does that, skip setup (X button on right up corner)."
@@ -94,6 +101,8 @@ cleanup_alvr
 echor "Go to 'Installation' tab at left and press 'Register ALVR driver'"
 echog "After that, press press 'Launch SteamVR' at left corner and hit enter here to continue."
 read
+echog "Downloading ALVR apk, you can install it now from the installation folder into your headset using either ADB or Sidequest on host."
+wget -q --show-progress "$ALVR_APK_LINK"
 echog "From this point on, alvr will automatically start with SteamVR. But it's still quite broken mechanism so we need to use additional script for auto-restart to work."
 echog "Don't close ALVR yet."
 
@@ -101,14 +110,14 @@ STEP_INDEX=4
 
 # installing wlxoverlay
 echog "Since SteamVR overlay is sort-of broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland."
-wget -q --show-progress $WLXOVERLAY_LINK
-chmod +x $WLXOVERLAY_FILENAME
+wget -q --show-progress "$WLXOVERLAY_LINK"
+chmod +x "$WLXOVERLAY_FILENAME"
 if [ "$WAYLAND_DISPLAY" != "" ]; then
    echog "If you're on wayland (and not on wlroots-based compositor), it will ask for display to choose. Choose each displays sequentially if you have more than 1."
 else
    echog "If you're using Xorg, you don't need to do anything'"
 fi
-./$WLXOVERLAY_FILENAME &
+./"$WLXOVERLAY_FILENAME" &
 if [ "$WAYLAND_DISPLAY" != "" ]; then
    echog "If everything went well, you might see little icon on your desktop that indicates that screenshare is happening (by WlxOverlay)"
 fi
@@ -131,11 +140,9 @@ STEP_INDEX=6
 
 # post messages
 echog "From that point on, ALVR should be installed and WlxOverlay should be working. Please refer to https://github.com/galister/WlxOverlay/wiki/Getting-Started to familiarise with controls."
-echor "To start alvr now you need to use start-vr.sh script from this repository from inside distrobox container to allow for painless auto-restart (it's not perfect, but still way better than not using it)"
-echog "This script auto-starts steamvr, which then starts up alvr driver and after some time dashboard automatically opens. When restart happens, it cleans up dashboard and re-launches it again later."
-echog "Before launching start-vr.sh script, please open distrobox steam first."
-echog "To close vr, press ctrl+c in terminal where start-vr.sh script is running. It will automatically close alvr and steamvr."
+echor "To start alvr now you need to use start-alvr.sh script from this repository."
+echog "In case you want to enter into container, do 'source setup-env.sh && distrobox-enter arch-alvr'"
+echor "Before launching start-alvr.sh script, please open steam (!steam from distrobox, not your main host steam!) first."
+echog "To close vr, press ctrl+c in terminal where start-alvr.sh script is running. It will automatically close alvr and steamvr."
 echor "Very important: to prevent game from looking like it's severily lagging, please turn on legacy reprojection in per-app video settings in steamvr. This improves experience drastically."
-echor "To open container next time, use 'distrobox-enter arch-alvr' "
 echog "Tip: to prevent double-restart due to how client resets it's settings, you can change settings and then put headset to sleep, and power back. This restarts client and server, and prevents double restart."
-echor "Please re-enter the container and restart steam to apply locale to container apps."

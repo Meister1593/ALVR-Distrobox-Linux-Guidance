@@ -1,5 +1,5 @@
 #!/bin/bash
-source links.sh
+source ./links.sh
 
 echo "Deleting existing alvr"
 rm -r installation/alvr installation/ALVR-x86_64.AppImage

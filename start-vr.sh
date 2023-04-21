@@ -2,7 +2,7 @@
 
 # credits to original script go to galister#4182
 
-source ./helper_functions.sh
+source ./helper-functions.sh
 
 # go to installation folder in case we aren't already there
 cd installation || echog "Already at needed folder"

@@ -1,15 +1,25 @@
 #!/bin/bash
 
-source ./helper_functions.sh
+source ./helper-functions.sh
 
 function detect_gpu() {
    local gpu
    gpu=$(lspci | grep -i vga)
-   if [[ -n "$(echo "$gpu" | grep -i amd)" ]]; then
+   if echo "$gpu" | grep -q -i amd; then
       echo 'amd'
-   elif [[ -n "$(echo "$gpu" | grep -i nvidia)" ]]; then
+   elif echo "$gpu" | grep -q -i nvidia; then
+      local driver_string
+      local is_open
+      driver_string=$(</proc/driver/nvidia/version)
+      if [[ "$driver_string" == *"Open"* ]]; then
+         is_open=true
+      fi
       local driver_version
-      driver_version=$(< /proc/driver/nvidia/version head -1 | tail -2 | tr -s ' ' | cut -d' ' -f8)
+      if [[ "$is_open" == true ]]; then
+         driver_version=$(echo "$driver_string" | head -1 | tail -2 | tr -s ' ' | cut -d' ' -f10)
+      else
+         driver_version=$(echo "$driver_string" | head -1 | tail -2 | tr -s ' ' | cut -d' ' -f8)
+      fi
       echo "nvidia $driver_version"
    else
       echo 'intel'
@@ -25,41 +35,39 @@ function detect_audio() {
       echo 'none'
    fi
 }
-GPU=$(detect_gpu)
-AUDIO_SYSTEM=$(detect_audio)
 
 function phase1_distrobox_podman_install() {
+   echor "Phase 1"
    mkdir installation
-   cd installation
-   
-   # Installing distrobox and podman
-   # installing distrobox from git because script installs latest release (not what we want)
-   git clone https://github.com/89luca89/distrobox.git distrobox-git
-   mkdir distrobox
    (
-   cd distrobox-git || exit
-   ./install --prefix ../distrobox
+      cd installation || exit
+
+      # Installing distrobox and podman
+      # installing distrobox from git because script installs latest release (not what we want)
+      git clone https://github.com/89luca89/distrobox.git distrobox-git
+      mkdir distrobox
+      (
+         cd distrobox-git || exit
+         ./install --prefix ../distrobox
+      )
+      rm -rf distrobox-git
+
+      if [[ -z "$(which podman)" ]]; then
+         echog "Could not find podman in system path, installing locally"
+         mkdir podman
+         curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD/podman"
+      else
+         echog "Found Podman installation on your system, not installing podman locally."
+      fi
    )
-   
-   if [[ -z "$(which podman)" ]]; then
-      echog "Could not find podman in system path, installing locally"
-      mkdir podman
-      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD/podman"
-   else
-     echog "Found Podman installation on your system, using that"
-   fi
-   
-   # Appending paths for distrobox and podman to bashrc
-   echo "export PATH=$PWD/distrobox/bin:\$PATH #alvr-distrobox" | tee -a ~/.bashrc
-   if [[ -z "$(which podman)" ]]; then
-      echo "export PATH=$PWD/podman/bin:\$PATH #alvr-distrobox" | tee -a ~/.bashrc
-   fi
-   echo "xhost +si:localuser:\$USER #alvr-distrobox" | tee -a ~/.bashrc # for xorg setups, doesn't work in xinitrc, need to find better place
-   
-   echor "Please relog from your system and re-run this script in new terminal window from the same folder to continue in next step. This ensures that distrobox can be used from both new terminals and from your desktop."
 }
 
 function phase2_distrobox_cotainer_creation() {
+   echor "Phase 2"
+   GPU=$(detect_gpu)
+   AUDIO_SYSTEM=$(detect_audio)
+
+   source ./setup_env.sh
    if [[ "$GPU" == "amd" ]]; then
       echo "amd" | tee -a ./installation/specs.conf
       distrobox-assemble create -f ./distrobox-amd.ini
@@ -78,12 +86,9 @@ function phase2_distrobox_cotainer_creation() {
       echor "Unsupported audio system. Please report this issue."
       exit 1
    fi
-   
+
    distrobox-enter arch-alvr
 }
 
-if [[ -e "installation" ]]; then
-   phase2_distrobox_cotainer_creation
-else
-   phase1_distrobox_podman_install
-fi
+phase1_distrobox_podman_install
+phase2_distrobox_cotainer_creation
