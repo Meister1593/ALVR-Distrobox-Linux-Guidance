@@ -87,7 +87,7 @@ function phase2_distrobox_cotainer_creation() {
       exit 1
    fi
 
-   distrobox-enter arch-alvr
+   distrobox-enter --name arch-alvr -- bash -c './setup-inside-distrobox.sh'
 }
 
 phase1_distrobox_podman_install
