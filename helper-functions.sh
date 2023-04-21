@@ -5,12 +5,12 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 function echog(){
-   sleep 0.3
    echo -e "${RED}${STEP_INDEX}${NC} : ${GREEN}$1${NC}"
+   sleep 0.3
 }
 function echor(){
-   sleep 0.3
    echo -e "${RED}${STEP_INDEX}${NC} : ${RED}$1${NC}"
+   sleep 0.3
 }
 function cleanup_alvr(){
    echog "Cleaning up ALVR"

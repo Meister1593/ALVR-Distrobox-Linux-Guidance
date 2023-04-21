@@ -10,14 +10,14 @@ STEP_INDEX=1
 cd installation || echog "Already in installation folder"
 
 # Get current gpu and version in case if it's nvidia from configuration
-GPU="$(< specs.conf head -1 | tail -2)"
+GPU="$(head <specs.conf -1 | tail -2)"
 GPU_VERSION=''
 if [[ "$GPU" == nvidia* ]]; then
    GPU_VERSION=$(echo "$GPU" | cut -d' ' -f2)
    GPU=$(echo "$GPU" | cut -d' ' -f1)
 fi
 
-AUDIO_SYSTEM="$(< specs.conf head -2 | tail -1)"
+AUDIO_SYSTEM="$(head <specs.conf -2 | tail -1)"
 
 echog "Found $GPU gpu and $AUDIO_SYSTEM"
 
@@ -35,18 +35,20 @@ echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 sudo locale-gen
 
 echog "Installing packages for base functionality."
-sudo pacman -Syu git vim base-devel noto-fonts xdg-user-dirs fuse libx264 sdl2 libva-utils
+sudo pacman -Syu git vim base-devel noto-fonts xdg-user-dirs fuse libx264 sdl2 libva-utils --noconfirm
 echog "Installing steam, audio and driver packages."
 if [[ "$GPU" == "amd" ]]; then
    sudo pacman -Syu libva-mesa-driver vulkan-radeon lib32-vulkan-radeon lib32-libva-mesa-driver --noconfirm
 elif [[ "$GPU" == "nvidia" ]]; then
    sudo pacman -Syu nvidia-utils lib32-nvidia-utils cuda --noconfirm
+
+   # Installing downgrade in case needed for nvidia users
    git clone https://aur.archlinux.org/downgrade.git
    (
-   cd downgrade || exit
-   makepkg -si
+      cd downgrade || exit
+      makepkg -si
    )
-   
+
    NVIDIA_UTILS_VERSION=$(pacman -Q "nvidia-utils" | cut -d' ' -f2)
    NVIDIA_UTILS_VERSION=${NVIDIA_UTILS_VERSION%-*}
    echog "Host drivers version: $GPU_VERSION"
@@ -71,9 +73,10 @@ echog "Exporting steam to host as an application. It will show up as Steam (Runt
 distrobox-export --app steam
 
 STEP_INDEX=2
+sleep 2
 
 # Ask user for installing steamvr
-echog "Installed base packages and Steam. Please log into your steam account and install SteamVR."
+echog "Installed base packages and Steam. Please open 'Steam (Runtime) (on arch-alvr)' on the host and log into your steam account and install SteamVR."
 echog "After installing SteamVR, copy (ctrl + shift + c from terminal) and launch command bellow from your host terminal shell (outside this container) and press enter to continue there. This prevents annoying popup (yes/no with asking for superuser) that prevents steamvr from launching automatically."
 echog "sudo setcap CAP_SYS_NICE+ep $HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64/vrcompositor-launcher"
 read
@@ -81,23 +84,24 @@ echog "Now launch SteamVR once, close it and press enter here to continue again.
 read
 
 STEP_INDEX=3
+sleep 2
 
 # installing alvr
 echog "Installing alvr"
 echog "This installation script assumes that you will register alvr as a driver further, so it needs to extract appimage."
 wget -q --show-progress "$ALVR_LINK"
 chmod +x "$ALVR_FILENAME"
-./"$ALVR_FILENAME" --appimage-extract &> /dev/null
+./"$ALVR_FILENAME" --appimage-extract &>/dev/null
 mv squashfs-root alvr
-./alvr/usr/bin/alvr_dashboard &> /dev/null &
+./alvr/usr/bin/alvr_dashboard &>/dev/null &
 echog "ALVR and dashboard now launch and when it does that, skip setup (X button on right up corner)."
-echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu."
+echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu and 'Streamer: Connected in ALVR dashboard'."
 echog "In ALVR Dashboard settings at left side, scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
 echog "You can also untick 'Open setup wizard' too."
 echog "After you have done with this, press enter here."
 read
 cleanup_alvr
-./alvr/usr/bin/alvr_dashboard &> /dev/null &
+./alvr/usr/bin/alvr_dashboard &>/dev/null &
 echor "Go to 'Installation' tab at left and press 'Register ALVR driver'"
 echog "After that, press press 'Launch SteamVR' at left corner and hit enter here to continue."
 read
@@ -107,24 +111,26 @@ echog "From this point on, alvr will automatically start with SteamVR. But it's 
 echog "Don't close ALVR yet."
 
 STEP_INDEX=4
+sleep 2
 
 # installing wlxoverlay
 echog "Since SteamVR overlay is sort-of broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland."
 wget -q --show-progress "$WLXOVERLAY_LINK"
 chmod +x "$WLXOVERLAY_FILENAME"
-if [ "$WAYLAND_DISPLAY" != "" ]; then
+if [[ "$WAYLAND_DISPLAY" != "" ]]; then
    echog "If you're on wayland (and not on wlroots-based compositor), it will ask for display to choose. Choose each displays sequentially if you have more than 1."
 else
    echog "If you're using Xorg, you don't need to do anything'"
 fi
 ./"$WLXOVERLAY_FILENAME" &
-if [ "$WAYLAND_DISPLAY" != "" ]; then
+if [[ "$WAYLAND_DISPLAY" != "" ]]; then
    echog "If everything went well, you might see little icon on your desktop that indicates that screenshare is happening (by WlxOverlay)"
 fi
 echog "WlxOverlay adds itself to auto-startup so you don't need to do anything with it to make it autostart. Press enter to continue."
 read
 
 STEP_INDEX=5
+sleep 2
 
 # patching steamvr
 echog "To prevent issues with SteamVR spamming with messages into it's own web interface, i created patcher that can prevent this spam. Without this, you will have issues with opening Video Setttings per app, bindings, etc."
@@ -137,6 +143,7 @@ fi
 cleanup_alvr
 
 STEP_INDEX=6
+sleep 2
 
 # post messages
 echog "From that point on, ALVR should be installed and WlxOverlay should be working. Please refer to https://github.com/galister/WlxOverlay/wiki/Getting-Started to familiarise with controls."

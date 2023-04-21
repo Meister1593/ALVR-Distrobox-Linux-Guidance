@@ -42,14 +42,14 @@ function phase1_distrobox_podman_install() {
    (
       cd installation || exit
 
-      # Installing distrobox and podman
-      # installing distrobox from git because script installs latest release (not what we want)
-      git clone https://github.com/89luca89/distrobox.git distrobox-git
+      # Installing distrobox from git because script installs latest release without distrobox-assemble functionality
       mkdir distrobox
+      git clone https://github.com/89luca89/distrobox.git distrobox-git
       (
          cd distrobox-git || exit
          ./install --prefix ../distrobox
       )
+
       rm -rf distrobox-git
 
       if [[ -z "$(which podman)" ]]; then
@@ -67,7 +67,7 @@ function phase2_distrobox_cotainer_creation() {
    GPU=$(detect_gpu)
    AUDIO_SYSTEM=$(detect_audio)
 
-   source ./setup_env.sh
+   source ./setup-env.sh
    if [[ "$GPU" == "amd" ]]; then
       echo "amd" | tee -a ./installation/specs.conf
       distrobox-assemble create -f ./distrobox-amd.ini
