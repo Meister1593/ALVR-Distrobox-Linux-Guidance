@@ -10,38 +10,34 @@
 
 4. Currently this guide doesn't include configuration guide for ALVR itself to make it work better, so you will have to do it yourself (High priority TODO).
 
-5. Microphone configuration currently isn't done yet, only in the startup script and not explained (High priority TODO).
+5. Microphone configuration currently isn't done yet, vr startup script creates sink to be used for vr, but it's not explained (High priority TODO).
 
 6. Firewall configuration is skipped entirely and setup firewall configuration is broken, so it might not work in case you have strict firewall (alvr docs should have info about that) (Low priority TODO).
 
 7. Don't use SteamVR Beta (1.26+) version, it contains a lot of breaking changes that are yet to be tested to work with.
 
-8. If you're already using Distrobox, this will override your user PATH variable and use distrobox from this repository instead of your currently installed. This by itself isn't a problem for using distrobox containers. but it may be crumblesome in case you want to remove it using uninstaler, as it will also remove all previous desktop icons you have.
-
-9. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause.
+8. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause.
 
 ## Installing alvr in distrobox
-
-After you have installed Podman and Distrobox in your system, you can begin installing environment and ALVR with it.
 
 Open terminal in this repository folder and do:
 
 1. `./setup-outside-distrobox.sh`
    
-    This prepares distrobox, podman if they are needed to be installed and used, as well as basic installation of packages inside distrobox. Follow steps from that script.
-
-2. When you're done with `./setup-outside-distrobox.sh`, it will automatically enter container and you need to launch main guidance script with `./setup-inside-distrobox.sh`. From there, pay close attention to green, and especially red text and follow it.
+   That's it. **Follow all green and especially red text carefully from the scripts.**
+   
+   After full installation, you can use `./start-alvr.sh` to launch alvr automatically. Don't forget to start steam from container (`Steam (Runtime) (on arch-alvr)` desktop link) prior to that.
+   
+   Script also downloads related apk file to install to headset into `installation` folder for you. Use Sidequest or ADB to install it.
 
 ## Updating ALVR & WlxOverlay
 
-In case there was an update for ALVR or WlxOverlay, you can manually update links in `links.sh` file and run `./update-vr-apps.sh`. For automatic update, usually someone from maintainers have to update `links.sh` and then after pulling new version you just run `./update-vr-apps.sh`.
-
-For the moment, this process is semi-automaitc/manual to ensure that end user won't have any possible issue with specific alvr/wlxoverlay version when the first-time installation has occurred.
+In case there was an update for ALVR or WlxOverlay in the repository, you can run `./update-vr-apps.sh`. In case you want to manually update ALVR or WlxOverlay versions, you can change `links.sh` file accordingly and run the same script.
 
 ## Uninstalling
 
-To uninstall this, simply run `./uninstall-distrobox.sh` and it will automatically remove podman (if was installed locally), distrobox, and all PATH changes that were made by this script.
+To uninstall this, simply run `./uninstall-distrobox.sh` and it will automatically remove everything related to locally installed distrobox, it's containers, podman and everything inside in `installation` folder.
 
 ## Additional info
 
-Highly recommend using CoreCtrl and setting settings to VR profile for **AMD** gpus, as well as cpu to performance profile (if it's a Ryzen cpu). Without setting those gpu profiles, you **will** have serious shutters/wobbles/possibly crashes (sway users) at random point while playing ([[PERF] Subpar GPU performance due to wrong power profile mode · Issue #469 · ValveSoftware/SteamVR-for-Linux · GitHub](https://github.com/ValveSoftware/SteamVR-for-Linux/issues/469)).
+Highly recommend using CoreCtrl (install it using your distribution package management) and setting settings to VR profile for **AMD** gpus, as well as cpu to performance profile (if it's a Ryzen cpu). Without setting those gpu profiles, you **will** have serious shutters/wobbles/possibly crashes (sway users) at random point while playing ([[PERF] Subpar GPU performance due to wrong power profile mode · Issue #469 · ValveSoftware/SteamVR-for-Linux · GitHub](https://github.com/ValveSoftware/SteamVR-for-Linux/issues/469)).
