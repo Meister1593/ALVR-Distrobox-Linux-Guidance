@@ -16,7 +16,7 @@
 
 7. Don't use SteamVR Beta (1.26+) version, it contains a lot of breaking changes that are yet to be tested to work with.
 
-8. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause.
+8. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause. **Possible cause - latest 530 drivers, so if you happen to have this issue - please try downgrading them to 525 on the host and re-running script. It seems like they has issues with running any container graphics software, including podman/distrobox and flatpak**
 
 ## Installing alvr in distrobox
 
