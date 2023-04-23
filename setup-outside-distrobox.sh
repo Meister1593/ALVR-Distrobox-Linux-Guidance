@@ -52,13 +52,9 @@ function phase1_distrobox_podman_install() {
 
       rm -rf distrobox-git
 
-      if [[ -z "$(which podman)" ]]; then
-         echog "Could not find podman in system path, installing locally"
-         mkdir podman
-         curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD/podman"
-      else
-         echog "Found Podman installation on your system, not installing podman locally."
-      fi
+      echog "Installing rootless podman locally"
+      mkdir podman
+      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD/podman"
    )
 }
 

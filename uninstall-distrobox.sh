@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./setup-env.sh
+
 podman stop arch-alvr
 
 distrobox-rm arch-alvr
