@@ -32,9 +32,9 @@ echo "LC_ALL=en_US.UTF-8" | sudo tee /etc/locale.conf
 echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
 echo "export LANG=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 sudo locale-gen
+LANG=en_US.UTF-8
+LC_ALL=en_US.UTF-8
 
 echog "Installing packages for base functionality."
 sudo pacman -Syu git vim base-devel noto-fonts xdg-user-dirs fuse libx264 sdl2 libva-utils --noconfirm || exit 1
