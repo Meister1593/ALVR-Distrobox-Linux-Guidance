@@ -42,7 +42,7 @@ function phase1_distrobox_podman_install() {
    (
       cd installation || exit
 
-      # Installing distrobox from git because script installs latest release without distrobox-assemble functionality
+      # Installing distrobox from git because it is much newer
       mkdir distrobox
       git clone https://github.com/89luca89/distrobox.git distrobox-git
       (
@@ -66,7 +66,9 @@ function phase2_distrobox_cotainer_creation() {
    source ./setup-env.sh
    if [[ "$GPU" == "amd" ]] || [[ "$GPU" == nvidia* ]]; then
       echo "$GPU" | tee -a ./installation/specs.conf
-      distrobox-assemble create
+      distrobox-create --image docker.io/library/archlinux:latest \
+      --name arch-alvr \
+      --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
    else
       echor "Intel is not supported yet."
       exit 1
@@ -80,7 +82,8 @@ function phase2_distrobox_cotainer_creation() {
       exit 1
    fi
 
-   distrobox-enter --name arch-alvr -- bash -c './setup-inside-distrobox.sh'
+   distrobox-enter --name arch-alvr -- bash -c './setup-inside-distrobox.sh' \
+   || (echor "Couldn't enter distrobox container first time, please report it to maintainer." && exit 1)
 }
 
 phase1_distrobox_podman_install

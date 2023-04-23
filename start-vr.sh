@@ -7,6 +7,8 @@ source ./helper-functions.sh
 # go to installation folder in case we aren't already there
 cd installation || echog "Already at needed folder"
 
+steam & # steamvr should pick up steam eventually even after it was started
+
 STEAMVR_PATH="$HOME/.local/share/Steam/steamapps/common/SteamVR"
 LATEST_MIC_ID=-1
 

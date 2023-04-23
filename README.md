@@ -26,7 +26,7 @@ Open terminal in this repository folder and do:
    
    That's it. **Follow all green and especially red text carefully from the scripts.**
    
-   After full installation, you can use `./start-alvr.sh` to launch alvr automatically. Don't forget to start steam from container (`Steam (Runtime) (on arch-alvr)` desktop link) prior to that.
+   After full installation, you can use `./start-alvr.sh` to launch alvr automatically.
    
    Script also downloads related apk file to install to headset into `installation` folder for you. Use Sidequest or ADB to install it.
 
