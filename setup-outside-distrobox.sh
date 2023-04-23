@@ -58,7 +58,7 @@ function phase1_distrobox_podman_install() {
    )
 }
 
-function phase2_distrobox_cotainer_creation() {
+function phase2_distrobox_container_creation() {
    echor "Phase 2"
    GPU=$(detect_gpu)
    AUDIO_SYSTEM=$(detect_audio)
@@ -67,8 +67,8 @@ function phase2_distrobox_cotainer_creation() {
    if [[ "$GPU" == "amd" ]] || [[ "$GPU" == nvidia* ]]; then
       echo "$GPU" | tee -a ./installation/specs.conf
       distrobox-create --pull --image docker.io/library/archlinux:latest \
-      --name arch-alvr \
-      --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
+         --name arch-alvr \
+         --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
    else
       echor "Intel is not supported yet."
       exit 1
@@ -82,9 +82,13 @@ function phase2_distrobox_cotainer_creation() {
       exit 1
    fi
 
-   distrobox-enter --name arch-alvr -- bash -c './setup-inside-distrobox.sh' \
-   || (echor "Couldn't install distrobox container first time, please report it to maintainer." && exit 1)
+   distrobox-enter --name arch-alvr -- ./setup-inside-distrobox-phase-3.sh ||
+      (echor "Couldn't install distrobox container first time, please report it to maintainer." && exit 1)
+   distrobox-stop --name arch-alvr --yes
+   distrobox-enter --name arch-alvr --additional-flags "--env LANG=en_US.UTF-8 --env LC_ALL=en_US.UTF-8" -- ./setup-inside-distrobox-phase-4.sh ||
+      (echor "Couldn't install distrobox container first time, please report it to maintainer." && exit 1) 
+      # envs are required! otherwise first time install won't have those env vars, despite them being even in bashrc, locale conf, profiles, etc
 }
 
 phase1_distrobox_podman_install
-phase2_distrobox_cotainer_creation
+phase2_distrobox_container_creation
