@@ -36,7 +36,7 @@ Open terminal in this repository folder and do:
 
 After installing ALVR you may want to configure it and steamvr to run at best quality for your given hardware/gpu. Open up ALVR using `./start-alvr.sh` script and do the following (each field with input value needs enter to confirm):
 
-##### Common configuration:
+#### Common configuration:
 
 1. **Resolution:** If you have 6600 XT level GPU you can select Low, and in case you don't mind lower FPS - Medium
 
@@ -58,19 +58,19 @@ After installing ALVR you may want to configure it and steamvr to run at best qu
 
 10. **Linux async reprojection:** keep it off, it's not needed anymore and client does reprojection better
 
-##### AMD-specific configuration:
+#### AMD-specific configuration:
 
 1. Preferred codec: HEVC, h264 by far looked choppy and has blocking issues.
 
 2. Reduce color banding: turn on, makes image even better
 
-##### Nvidia-specific configuration (needs feedback):
+#### Nvidia-specific configuration (needs feedback):
 
 1. Preferred codec: h264
 
 After that, restart your headset using power button and it will automatically restart steamvr once, applying all changes.
 
-##### SteamVR configuration:
+#### SteamVR configuration:
 
 Inside SteamVR you also may need to change settings to improve experience. Open settings by clicking on triple stripe on SteamVR window and expand Advanced Settings (Hide -> Show)
 
@@ -86,7 +86,7 @@ Inside SteamVR you also may need to change settings to improve experience. Open 
 
 6. **Developer tab: Set steamvr as openxr runtime** - this ensures that games using openxr (such as Bonelab) will use SteamVR.
 
-##### Distrobox note:
+#### Distrobox note:
 
 You can add your steam library from outside the container after alvr installation as for container, `/home/user` folder is the same as on your host, so you can easily add it from inside that steam.
 
