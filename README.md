@@ -2,8 +2,7 @@
 
 ## Disclaimer
 
-## !!!DON'T USE THIS SCRIPT IF YOU ALREADY HAVE DISTROBOX INSTALLED, IT MAY COMPRROMISE YOUR EXISTING CONTAINERS IF YOU DO UNINSTALL!!!
-## I just noticed that and currently trying to figure out why and report this issue to upstream
+## Recent issue with already installed distrobox containers has been fixed in the script and fix on distrobox upstream [has been created](https://github.com/89luca89/distrobox/pull/718), if you still have any issues please report them.
 
 1. This is just an attempt to make things easier for Linux users to use ALVR, SteamVR. By no means it's a comprehensive, fully featured and 100% working guide. Please open new issues and pull requests to correct this guide, scripts, etc etc.
 
