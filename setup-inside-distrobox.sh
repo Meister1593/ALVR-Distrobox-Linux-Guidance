@@ -32,6 +32,8 @@ echo "LC_ALL=en_US.UTF-8" | sudo tee /etc/locale.conf
 echo "en_US.UTF-8 UTF-8" | sudo tee -a /etc/locale.gen
 echo "export LANG=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 sudo locale-gen
 
 echog "Installing packages for base functionality."
