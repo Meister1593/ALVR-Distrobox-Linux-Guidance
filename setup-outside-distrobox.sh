@@ -44,7 +44,7 @@ function phase1_distrobox_podman_install() {
 
       echog "Installing rootless podman locally"
       mkdir podman
-      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD"
+      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" # temporary linked to own repository until MR passes
 
       # Installing distrobox from git because it is much newer
       mkdir distrobox
@@ -64,6 +64,17 @@ function phase2_distrobox_container_creation() {
    AUDIO_SYSTEM=$(detect_audio)
 
    source ./setup-env.sh
+
+   if [[ "$(which podman)" != "$PWD/installation/podman/bin/podman" ]]; then
+      echor "Failed to install podman properly"
+      exit 1
+   fi
+
+   if [[ "$(which distrobox)" != "$PWD/installation/distrobox/bin/distrobox" ]]; then
+      echor "Failed to install podman properly"
+      exit 1
+   fi
+
    if [[ "$GPU" == "amd" ]] || [[ "$GPU" == nvidia* ]]; then
       echo "$GPU" | tee -a ./installation/specs.conf
       distrobox-create --pull --image docker.io/library/archlinux:latest \
