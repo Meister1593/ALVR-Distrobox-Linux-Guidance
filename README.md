@@ -2,6 +2,9 @@
 
 ## Disclaimer
 
+## !!!DON'T USE THIS SCRIPT IF YOU ALREADY HAVE DISTROBOX INSTALLED, IT MAY COMPRROMISE YOUR EXISTING CONTAINERS IF YOU DO UNINSTALL!!!
+## I just noticed that and currently trying to figure out why and report this issue to upstream
+
 1. This is just an attempt to make things easier for Linux users to use ALVR, SteamVR. By no means it's a comprehensive, fully featured and 100% working guide. Please open new issues and pull requests to correct this guide, scripts, etc etc.
 
 2. This guide is not adjusted for Intel gpu owners yet. Only NVIDIA and AMDGPU (Low priority TODO).
