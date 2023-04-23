@@ -42,6 +42,10 @@ function phase1_distrobox_podman_install() {
    (
       cd installation || exit
 
+      echog "Installing rootless podman locally"
+      mkdir podman
+      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD"
+
       # Installing distrobox from git because it is much newer
       mkdir distrobox
       git clone https://github.com/89luca89/distrobox.git distrobox-git
@@ -51,10 +55,6 @@ function phase1_distrobox_podman_install() {
       )
 
       rm -rf distrobox-git
-
-      echog "Installing rootless podman locally"
-      mkdir podman
-      curl -s https://raw.githubusercontent.com/89luca89/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD/podman"
    )
 }
 
@@ -66,7 +66,7 @@ function phase2_distrobox_cotainer_creation() {
    source ./setup-env.sh
    if [[ "$GPU" == "amd" ]] || [[ "$GPU" == nvidia* ]]; then
       echo "$GPU" | tee -a ./installation/specs.conf
-      distrobox-create --image docker.io/library/archlinux:latest \
+      distrobox-create --pull --image docker.io/library/archlinux:latest \
       --name arch-alvr \
       --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
    else
@@ -83,7 +83,7 @@ function phase2_distrobox_cotainer_creation() {
    fi
 
    distrobox-enter --name arch-alvr -- bash -c './setup-inside-distrobox.sh' \
-   || (echor "Couldn't enter distrobox container first time, please report it to maintainer." && exit 1)
+   || (echor "Couldn't install distrobox container first time, please report it to maintainer." && exit 1)
 }
 
 phase1_distrobox_podman_install

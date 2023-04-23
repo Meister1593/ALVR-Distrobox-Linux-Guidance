@@ -81,7 +81,8 @@ STEP_INDEX=2
 sleep 2
 
 # Ask user for installing steamvr
-echog "Installed base packages and Steam. Please open 'Steam (Runtime) (on arch-alvr)' on the host and log into your steam account and install SteamVR."
+echog "Installed base packages and Steam. Opening steam. Please install SteamVR from it."
+steam &>/dev/null &
 echog "After installing SteamVR, copy (ctrl + shift + c from terminal) and launch command bellow from your host terminal shell (outside this container) and press enter to continue there. This prevents annoying popup (yes/no with asking for superuser) that prevents steamvr from launching automatically."
 echog "sudo setcap CAP_SYS_NICE+ep $HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64/vrcompositor-launcher"
 read
@@ -152,7 +153,7 @@ sleep 2
 
 # post messages
 echog "From that point on, ALVR should be installed and WlxOverlay should be working. Please refer to https://github.com/galister/WlxOverlay/wiki/Getting-Started to familiarise with controls."
-echor "To start alvr now you need to use start-alvr.sh script from this repository."
+echor "To start alvr now you need to use start-alvr.sh script from this repository. It will also open Steam for you."
 echog "In case you want to enter into container, do 'source setup-env.sh && distrobox-enter arch-alvr'"
 # echor "Before launching start-alvr.sh script, please open steam (!steam from distrobox, not your main host steam!) first." # - uses system podman, script starts up steam automatically as workaround, issue: https://github.com/89luca89/distrobox/issues/716
 echog "To close vr, press ctrl+c in terminal where start-alvr.sh script is running. It will automatically close alvr and steamvr."
