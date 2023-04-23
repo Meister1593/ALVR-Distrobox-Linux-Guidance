@@ -85,7 +85,7 @@ echor "Phase 4"
    mv squashfs-root alvr
    ./alvr/usr/bin/alvr_dashboard &>/dev/null &
    echog "ALVR and dashboard now launch and when it does that, skip setup (X button on right up corner)."
-   echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu and 'Streamer: Connected in ALVR dashboard'."
+   echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu and 'Streamer: Connected' in ALVR dashboard."
    echog "In ALVR Dashboard settings at left side, scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
    echog "You can also untick 'Open setup wizard' too."
    echog "After you have done with this, press enter here."
@@ -104,7 +104,7 @@ echor "Phase 4"
    sleep 2
 
    # installing wlxoverlay
-   echog "Since SteamVR overlay is sort-of broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland."
+   echog "Since SteamVR overlay is partially broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland and has ability to control whole desktop from inside VR."
    wget -q --show-progress "$WLXOVERLAY_LINK"
    chmod +x "$WLXOVERLAY_FILENAME"
    if [[ "$WAYLAND_DISPLAY" != "" ]]; then
@@ -124,7 +124,7 @@ echor "Phase 4"
 
    # patching steamvr
    echog "To prevent issues with SteamVR spamming with messages into it's own web interface, i created patcher that can prevent this spam. Without this, you will have issues with opening Video Setttings per app, bindings, etc."
-   echog "If you're okay with patching (or have compatible SteamVR version), you can type y and press enter to patch SteamVR. Otherwise just press enter to skip"
+   echog "If you're okay with patching (and have compatible SteamVR version), you can type y and press enter to patch SteamVR. Otherwise just press enter to skip"
    read -r DO_PATCH
    if [[ "$DO_PATCH" == "y" ]]; then
       ../patch_bindings_spam.sh "$HOME/.steam/steam/steamapps/common/SteamVR"
