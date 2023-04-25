@@ -75,10 +75,21 @@ function phase2_distrobox_container_creation() {
       exit 1
    fi
 
-   if [[ "$GPU" == "amd" ]] || [[ "$GPU" == nvidia* ]]; then
-      echo "$GPU" | tee -a ./installation/specs.conf
+   echo "$GPU" | tee -a ./installation/specs.conf
+   if [[ "$GPU" == "amd" ]]; then
       distrobox-create --pull --image docker.io/library/archlinux:latest \
          --name arch-alvr \
+         --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
+   elif [[ "$GPU" == nvidia* ]]; then
+      CUDA_LIBS="$(find /usr/lib* -iname "libcuda*.so*")"
+      if [[ -z $CUDA_LIBS ]]; then
+         echor "Couldn't find CUDA on host, please install it as it's required for NVENC support."
+         exit 1
+      fi
+      
+      distrobox-create --pull --image docker.io/library/archlinux:latest \
+         --name arch-alvr \
+         --nvidia \
          --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
    else
       echor "Intel is not supported yet."

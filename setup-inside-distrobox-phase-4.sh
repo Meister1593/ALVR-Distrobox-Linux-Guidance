@@ -24,27 +24,28 @@ echor "Phase 4"
    if [[ "$GPU" == "amd" ]]; then
       sudo pacman -Syu libva-mesa-driver vulkan-radeon lib32-vulkan-radeon lib32-libva-mesa-driver --noconfirm || exit 1
    elif [[ "$GPU" == "nvidia" ]]; then
-      sudo pacman -Syu nvidia-utils lib32-nvidia-utils cuda --noconfirm || exit 1
+      echog "Using host system driver mounts, not installing anything inside for nvidia drivers."
+      # sudo pacman -Syu nvidia-utils lib32-nvidia-utils cuda --noconfirm || exit 1
 
-      # Installing downgrade in case needed for nvidia users
-      git clone https://aur.archlinux.org/downgrade.git
-      (
-         cd downgrade || exit
-         makepkg -si
-      )
+      # # Installing downgrade in case needed for nvidia users
+      # git clone https://aur.archlinux.org/downgrade.git
+      # (
+      #    cd downgrade || exit
+      #    makepkg -si
+      # )
 
-      NVIDIA_UTILS_VERSION=$(pacman -Q "nvidia-utils" | cut -d' ' -f2)
-      NVIDIA_UTILS_VERSION=${NVIDIA_UTILS_VERSION%-*}
-      echog "Host drivers version: $GPU_VERSION"
-      echog "Distrobox drivers version: $NVIDIA_UTILS_VERSION"
-      if [[ "$GPU_VERSION" != "$NVIDIA_UTILS_VERSION" ]]; then
-         echor "Your host drivers are not the same as in distrobox, meaning that you probably need to downgrade them inside distrobox. Please both packages with same version as on host."
-         echor "If this is a mistake, you can just choose the same versions and report this as a bug (in parsing nvidia version))"
-         sudo downgrade lib32-nvidia-utils nvidia-utils
-         echor "Make sure that driver versions are the same at all times, so when you update host drivers, make sure to update drivers (sudo pacman -Syu) in distrobox too."
-      else
-         echor "Your driver versions match from host and distrobox! Installation continues."
-      fi
+      # NVIDIA_UTILS_VERSION=$(pacman -Q "nvidia-utils" | cut -d' ' -f2)
+      # NVIDIA_UTILS_VERSION=${NVIDIA_UTILS_VERSION%-*}
+      # echog "Host drivers version: $GPU_VERSION"
+      # echog "Distrobox drivers version: $NVIDIA_UTILS_VERSION"
+      # if [[ "$GPU_VERSION" != "$NVIDIA_UTILS_VERSION" ]]; then
+      #    echor "Your host drivers are not the same as in distrobox, meaning that you probably need to downgrade them inside distrobox. Please both packages with same version as on host."
+      #    echor "If this is a mistake, you can just choose the same versions and report this as a bug (in parsing nvidia version))"
+      #    sudo downgrade lib32-nvidia-utils nvidia-utils
+      #    echor "Make sure that driver versions are the same at all times, so when you update host drivers, make sure to update drivers (sudo pacman -Syu) in distrobox too."
+      # else
+      #    echor "Your driver versions match from host and distrobox! Installation continues."
+      # fi
    else
       echor "Couldn't determine gpu with name: $GPU ($GPU_VERSION), exiting!"
       exit 1
