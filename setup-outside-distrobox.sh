@@ -101,5 +101,9 @@ function phase2_distrobox_container_creation() {
       # envs are required! otherwise first time install won't have those env vars, despite them being even in bashrc, locale conf, profiles, etc
 }
 
+# Required on xorg setups
+if [[ -z $WAYLAND_DISPLAY ]]; then
+    xhost "+si:localuser:$USER" || (echor "Couldn't use xhost, please install it and re-run installation" && exit 1)
+fi
 phase1_distrobox_podman_install
 phase2_distrobox_container_creation

@@ -17,7 +17,6 @@ run_additional_stuff() {
 }
 
 run_vrstartup() {
-  setup_mic
   "$STEAMVR_PATH/bin/vrstartup.sh" >/dev/null 2>&1 &
 }
 
@@ -34,17 +33,17 @@ if pidof vrmonitor >/dev/null; then
   run_additional_stuff
 fi
 
-trap 'echo SIGINT!; cleanup_alvr; exit 0' INT
-trap 'echo SIGTERM!; cleanup_alvr; exit 0' TERM
+trap 'echo SIGINT!; cleanup_alvr; unload_mic; exit 0' INT
+trap 'echo SIGTERM!; cleanup_alvr; unload_mic; exit 0' TERM
 
 while true; do
 
   if ! pidof vrmonitor >/dev/null; then
     cleanup_alvr
     unload_mic
-
+    setup_mic
+    
     run_vrstartup
-
     sleep 12
     run_additional_stuff
   fi
