@@ -30,7 +30,7 @@ For installing you only really need couple of dependencies on host:
 
 After you have installed required dependencies for your installation from above, open terminal in this repository folder and do:
 
-1. `./setup-outside-distrobox.sh`
+1. `./setup.sh`
    
    That's it. **Follow all green and especially red text carefully from the scripts.**
 

@@ -13,4 +13,3 @@ fi
 prefix="$1"
 
 PATH=$PWD/$prefix/podman/bin:$PWD/$prefix/distrobox/bin:$PATH
-echog "PATH: $PATH"
