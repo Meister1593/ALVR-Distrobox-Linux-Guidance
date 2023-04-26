@@ -34,7 +34,9 @@ After you have installed required dependencies for your installation from above,
    
    That's it. **Follow all green and especially red text carefully from the scripts.**
 
-   In case if have errors during installation, please report the full log as-is (remove private info if you happen to have some) as an Issue. 
+   In case if have errors during installation, please report the full log as-is (remove private info if you happen to have some) as an Issue.
+   
+   But if you are just reinstalling it, please run `./uninstall-distrobox.sh` first before trying to install again.
    
    After full installation, you can use `./start-alvr.sh` to launch alvr automatically.
    
