@@ -4,7 +4,8 @@ source ./helper-functions.sh
 
 # Required on xorg setups
 if [[ -z $WAYLAND_DISPLAY ]]; then
-    if ! xhost "+si:localuser:$USER"; then
+    xhost "+si:localuser:$USER"
+    if [ $? -ne 0 ]; then
         echo "Couldn't use xhost, please install it and re-run installation"
         exit 1
     fi
