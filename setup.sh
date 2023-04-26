@@ -2,6 +2,9 @@
 
 source ./helper-functions.sh
 
+prefix="installation"
+container_name="arch-alvr"
+
 function detect_gpu() {
    local gpu
    gpu=$(lspci | grep -i vga)
@@ -38,9 +41,9 @@ function detect_audio() {
 
 function phase1_distrobox_podman_install() {
    echor "Phase 1"
-   mkdir installation
+   mkdir $prefix
    (
-      cd installation || exit
+      cd $prefix || exit
 
       echog "Installing rootless podman locally"
       mkdir podman
@@ -63,58 +66,67 @@ function phase2_distrobox_container_creation() {
    GPU=$(detect_gpu)
    AUDIO_SYSTEM=$(detect_audio)
 
-   source ./setup-env.sh
+   source ./setup-dev-env.sh $prefix
 
-   if [[ "$(which podman)" != "$PWD/installation/podman/bin/podman" ]]; then
+   if [[ "$(which podman)" != "$PWD/$prefix/podman/bin/podman" ]]; then
       echor "Failed to install podman properly"
       exit 1
    fi
 
-   if [[ "$(which distrobox)" != "$PWD/installation/distrobox/bin/distrobox" ]]; then
+   if [[ "$(which distrobox)" != "$PWD/$prefix/distrobox/bin/distrobox" ]]; then
       echor "Failed to install podman properly"
       exit 1
    fi
 
-   echo "$GPU" | tee -a ./installation/specs.conf
+   echo "$GPU" | tee -a ./$prefix/specs.conf
    if [[ "$GPU" == "amd" ]]; then
-      distrobox-create --pull --image docker.io/library/archlinux:latest \
-         --name arch-alvr \
-         --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
+      if ! distrobox-create --pull --image docker.io/library/archlinux:latest \
+         --name $container_name \
+         --home "$PWD/$prefix/$container_name"; then
+         echor "Couldn't create distrobox container, please report it to maintainer."
+         exit 1
+      fi
    elif [[ "$GPU" == nvidia* ]]; then
       CUDA_LIBS="$(find /usr/lib* -iname "libcuda*.so*")"
       if [[ -z $CUDA_LIBS ]]; then
          echor "Couldn't find CUDA on host, please install it as it's required for NVENC support."
          exit 1
       fi
-      
-      distrobox-create --pull --image docker.io/library/archlinux:latest \
-         --name arch-alvr \
+
+      if ! distrobox-create --pull --image docker.io/library/archlinux:latest \
+         --name $container_name \
          --nvidia \
-         --home "$PWD/installation/arch-alvr" || (echor "Couldn't create distrobox container, please report it to maintainer." && exit 1)
+         --home "$PWD/$prefix/$container_name"; then
+         echor "Couldn't create distrobox container, please report it to maintainer."
+         exit 1
+      fi
    else
       echor "Intel is not supported yet."
       exit 1
    fi
    if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
-      echo "pipewire" | tee -a ./installation/specs.conf
+      echo "pipewire" | tee -a ./$prefix/specs.conf
    elif [[ "$AUDIO_SYSTEM" == "pulse" ]]; then
-      echo "pulse" | tee -a ./installation/specs.conf
+      echo "pulse" | tee -a ./$prefix/specs.conf
    else
       echor "Unsupported audio system. Please report this issue."
       exit 1
    fi
 
-   distrobox-enter --name arch-alvr -- ./setup-inside-distrobox-phase-3.sh ||
-      (echor "Couldn't install distrobox container first time, please report it to maintainer." && exit 1)
-   distrobox-stop --name arch-alvr --yes
-   distrobox-enter --name arch-alvr --additional-flags "--env LANG=en_US.UTF-8 --env LC_ALL=en_US.UTF-8" -- ./setup-inside-distrobox-phase-4.sh ||
-      (echor "Couldn't install distrobox container first time, please report it to maintainer." && exit 1) 
+   echog "Passing $prefix with name $container_name"
+
+   if ! distrobox-enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name" -- ./setup-inside-distrobox-phase-3.sh; then
+      echor "Couldn't install distrobox container first time, please report it to maintainer."
+      exit 1
+   fi
+   distrobox-stop --name $container_name --yes
+   if ! distrobox-enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name --env LANG=en_US.UTF-8 --env LC_ALL=en_US.UTF-8" -- ./setup-inside-distrobox-phase-4.sh; then
+      echor "Couldn't install distrobox container first time, please report it to maintainer."
       # envs are required! otherwise first time install won't have those env vars, despite them being even in bashrc, locale conf, profiles, etc
+      exit 1
+   fi
 }
 
-# Required on xorg setups
-if [[ -z $WAYLAND_DISPLAY ]]; then
-    xhost "+si:localuser:$USER" || (echor "Couldn't use xhost, please install it and re-run installation" && exit 1)
-fi
+init_prefixed_installation "$@"
 phase1_distrobox_podman_install
 phase2_distrobox_container_creation

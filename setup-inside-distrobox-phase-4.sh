@@ -3,10 +3,15 @@
 source ./links.sh
 source ./helper-functions.sh
 
+if [[ -z $prefix ]]; then
+   echor "No prefix found inside distrobox, aborting";
+   exit 1
+fi
+
 echor "Phase 4"
 (
    STEP_INDEX=1
-   cd installation || echor "Couldn't go into installation folder, aborting."
+   cd "$prefix" || echor "Couldn't go into installation folder, aborting."
 
    # Get current gpu and version in case if it's nvidia from configuration
    GPU="$(head <specs.conf -1 | tail -2)"

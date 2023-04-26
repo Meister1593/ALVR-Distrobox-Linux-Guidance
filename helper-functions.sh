@@ -22,3 +22,38 @@ function cleanup_alvr() {
       pkill -f -9 $vrp
    done
 }
+
+function init_prefixed_installation() {
+   positional=()
+   if [[ "$#" -eq 0 ]]; then
+      echog "Using default installation with default name"
+      return
+   fi
+   before_prefix=$prefix
+   before_container_name=$container_name
+   while [[ "$#" -gt 0 ]]; do
+      case $1 in
+      -p | --prefix)
+         prefix="$2"
+         shift
+         ;;
+      -c | --container-name)
+         container_name="$2"
+         shift
+         ;;
+      -*)
+         echor "Unknown parameter passed: $1"
+         exit 1
+         ;;
+      *)
+         positional+=("$1")
+         shift
+         ;;
+      esac
+      shift
+   done
+   if [[ $before_prefix == "$prefix" ]] || [[ $before_container_name == "$container_name" ]]; then
+      echor "You must choose both prefix and container name to use prefixed installation"
+      exit 1
+   fi
+}

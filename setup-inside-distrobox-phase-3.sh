@@ -3,10 +3,17 @@
 source ./links.sh
 source ./helper-functions.sh
 
+if [[ -z $prefix ]]; then
+   echor "No prefix found inside distrobox, aborting";
+   exit 1
+fi
+
+echog "Inside 3 $prefix"
+
 echor "Phase 3"
 
 (
-   cd installation || echor "Couldn't go into installation folder, aborting."
+   cd "$prefix" || echor "Couldn't go into installation folder, aborting."
 
    # Setting up arch
    echog "Setting up repositories"

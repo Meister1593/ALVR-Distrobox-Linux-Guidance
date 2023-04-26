@@ -10,9 +10,7 @@ if [[ -z $WAYLAND_DISPLAY ]]; then
     fi
 fi
 
-prefix="installation"
-
-# If someone uses this setup env to use prefixed installation, initialise prefix var
-init_prefixed_installation "$@"
+prefix="$1"
 
 PATH=$PWD/$prefix/podman/bin:$PWD/$prefix/distrobox/bin:$PATH
+echog "PATH: $PATH"
