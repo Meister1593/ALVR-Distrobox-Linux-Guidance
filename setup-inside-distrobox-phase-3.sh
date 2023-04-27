@@ -8,8 +8,6 @@ if [[ -z $prefix ]]; then
    exit 1
 fi
 
-echog "Inside 3 $prefix"
-
 echor "Phase 3"
 
 (

@@ -49,6 +49,7 @@ function phase1_distrobox_podman_install() {
       mkdir podman
       curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" # temporary linked to own repository until MR passes
 
+
       # Installing distrobox from git because it is much newer
       mkdir distrobox
       git clone https://github.com/89luca89/distrobox.git distrobox-git
@@ -80,7 +81,7 @@ function phase2_distrobox_container_creation() {
 
    echo "$GPU" | tee -a ./$prefix/specs.conf
    if [[ "$GPU" == "amd" ]]; then
-      distrobox-create --pull --image docker.io/library/archlinux:latest \
+      distrobox create --pull --image docker.io/library/archlinux:latest \
          --name $container_name \
          --home "$PWD/$prefix/$container_name"
       if [ $? -ne 0 ]; then
@@ -93,7 +94,7 @@ function phase2_distrobox_container_creation() {
          echor "Couldn't find CUDA on host, please install it as it's required for NVENC support."
          exit 1
       fi
-      distrobox-create --pull --image docker.io/library/archlinux:latest \
+      distrobox create --pull --image docker.io/library/archlinux:latest \
          --name $container_name \
          --nvidia \
          --home "$PWD/$prefix/$container_name"
@@ -115,13 +116,13 @@ function phase2_distrobox_container_creation() {
    fi
 
    echog "Passing $prefix with name $container_name"
-   distrobox-enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name" -- ./setup-inside-distrobox-phase-3.sh
+   distrobox enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name" -- ./setup-inside-distrobox-phase-3.sh
    if [ $? -ne 0 ]; then
       echor "Couldn't install distrobox container first time, please report it to maintainer."
       exit 1
    fi
-   distrobox-stop --name $container_name --yes
-   distrobox-enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name --env LANG=en_US.UTF-8 --env LC_ALL=en_US.UTF-8" -- ./setup-inside-distrobox-phase-4.sh
+   distrobox stop --name $container_name --yes
+   distrobox enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name --env LANG=en_US.UTF-8 --env LC_ALL=en_US.UTF-8" -- ./setup-inside-distrobox-phase-4.sh
    if [ $? -ne 0 ]; then
       echor "Couldn't install distrobox container first time, please report it to maintainer."
       # envs are required! otherwise first time install won't have those env vars, despite them being even in bashrc, locale conf, profiles, etc
