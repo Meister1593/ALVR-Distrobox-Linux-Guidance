@@ -47,7 +47,7 @@ function phase1_distrobox_podman_install() {
 
       echog "Installing rootless podman locally"
       mkdir podman
-      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" # temporary linked to own repository until MR passes
+      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/test/extras/install-podman | sh -s -- --prefix "$PWD" # temporary linked to own repository until MR passes
 
 
       # Installing distrobox from git because it is much newer
@@ -114,8 +114,7 @@ function phase2_distrobox_container_creation() {
       echor "Unsupported audio system. Please report this issue."
       exit 1
    fi
-
-   echog "Passing $prefix with name $container_name"
+   
    distrobox enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name" -- ./setup-inside-distrobox-phase-3.sh
    if [ $? -ne 0 ]; then
       echor "Couldn't install distrobox container first time, please report it to maintainer."
@@ -132,4 +131,4 @@ function phase2_distrobox_container_creation() {
 
 init_prefixed_installation "$@"
 phase1_distrobox_podman_install
-phase2_distrobox_container_creation
+#phase2_distrobox_container_creation
