@@ -2,7 +2,7 @@
 
 ## Disclaimer
 
-## Recent issue with already installed distrobox containers has been fixed in the script and fix on distrobox upstream [has been created](https://github.com/89luca89/distrobox/pull/718), if you still have any issues please report them.
+## Currently there is issues with portability which writes container files into local home user, so if you have existing distrobox setup i wouldn't advise you to try using this guide yet, i created issue on [podman](https://github.com/containers/podman/issues/18375) side and [created pr](https://github.com/89luca89/distrobox/pull/718) for distrobox (still in the process).
 
 1. This is just an attempt to make things easier for Linux users to use ALVR, SteamVR. By no means it's a comprehensive, fully featured and 100% working guide. Please open new issues and pull requests to correct this guide, scripts, etc etc.
 
