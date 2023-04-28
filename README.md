@@ -104,11 +104,11 @@ Do note though, there has been mentioned some issues with mounted devices, symli
 
 ## Updating ALVR & WlxOverlay
 
-In case there was an update for ALVR or WlxOverlay in the repository, you can run `./update-vr-apps.sh`. In case you want to manually update ALVR or WlxOverlay versions, you can change `links.sh` file accordingly and run the same script.
+In case there was an update for ALVR or WlxOverlay in the repository, you can run `./update-vr-apps.sh` with or without prefix. In case you want to manually update ALVR or WlxOverlay versions, you can change `links.sh` file accordingly and run the same script.
 
 ## Uninstalling
 
-To uninstall this, simply run `./uninstall-distrobox.sh` and it will automatically remove everything related to locally installed distrobox, it's containers, podman and everything inside in `installation` folder.
+To uninstall this, simply run `./uninstall.sh` and it will automatically remove everything related to locally installed distrobox, it's containers, podman and everything inside in `installation` or prefixed folder.
 
 ## Additional info
 
