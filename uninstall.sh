@@ -16,8 +16,4 @@ fi
 
 podman stop $container_name
 
-$ROOT_PERMS_COMMAND rm -rf "$prefix/$container_name"
-
-distrobox rm --force --rm-home "$container_name"
-
 $ROOT_PERMS_COMMAND rm -rf $prefix
