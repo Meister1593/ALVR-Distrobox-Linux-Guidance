@@ -39,8 +39,6 @@ else
 fi
 
 sudo pacman -Syu steam --noconfirm
-# echog "Exporting steam to host as an application. It will show up as Steam (Runtime) (on arch-alvr). "
-# distrobox-export --app steam
 
 STEP_INDEX=2
 sleep 2
@@ -85,7 +83,7 @@ STEP_INDEX=4
 sleep 2
 
 # installing wlxoverlay
-echog "Since SteamVR overlay is partially broken (and not that useful anyway) on Linux, we will use WlxOverlay, which works with both X11 and Wayland and has ability to control whole desktop from inside VR."
+echog "Since SteamVR overlay is partially broken on Linux, we will use WlxOverlay, which works with both X11 and Wayland and has ability to control whole desktop from inside VR."
 wget -q --show-progress "$WLXOVERLAY_LINK"
 chmod +x "$WLXOVERLAY_FILENAME"
 if [[ "$WAYLAND_DISPLAY" != "" ]]; then
@@ -112,6 +110,7 @@ if [[ "$DO_PATCH" == "y" ]]; then
 fi
 
 cleanup_alvr
+cd ..
 
 STEP_INDEX=6
 sleep 2
@@ -123,5 +122,5 @@ echog "In case you want to enter into container, do 'source setup-env.sh && dist
 echog "To close vr, press ctrl+c in terminal where start-alvr.sh script is running. It will automatically close alvr and steamvr."
 echor "Very important: to prevent game from looking like it's severily lagging, please turn on legacy reprojection in per-app video settings in steamvr. This improves experience drastically."
 echog "Tip: to prevent double-restart due to how client resets it's settings, you can change settings and then put headset to sleep, and power back. This restarts client and server, and prevents double restart."
-cd ..
+
 echog "Thank you for using the script! Continue with Post-installation notes to configure ALVR and SteamVR"

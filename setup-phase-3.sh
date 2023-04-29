@@ -24,6 +24,7 @@ echo "LANG=en_US.UTF-8" | sudo tee /etc/locale.conf
 echo "LC_ALL=en_US.UTF-8" | sudo tee /etc/locale.conf
 echo "export LANG=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
 echo "export LC_ALL=en_US.UTF-8 #alvr-distrobox" | tee -a ~/.bashrc
+
 cd ..
 
 exit 0

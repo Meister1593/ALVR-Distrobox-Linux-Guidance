@@ -37,7 +37,7 @@ function phase1_distrobox_podman_install() {
 
    echog "Installing rootless podman locally"
    mkdir podman
-   curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --verbose --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
+   curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
 
    # Installing distrobox from git because it is much newer
    mkdir distrobox
@@ -110,6 +110,7 @@ function phase2_distrobox_container_creation() {
    distrobox enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name" -- ./setup-phase-3.sh
    if [ $? -ne 0 ]; then
       echor "Couldn't install distrobox container first time at phase 3, please report it to maintainer."
+      # envs are required! otherwise first time install won't have those env vars, despite them being even in bashrc, locale conf, profiles, etc
       exit 1
    fi
    distrobox stop --name $container_name --yes
