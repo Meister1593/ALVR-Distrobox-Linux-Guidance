@@ -2,8 +2,6 @@
 
 ## Disclaimer
 
-## Currently there is issues with portability which writes container files into local home user, so if you have existing distrobox setup i wouldn't advise you to try using this guide yet, i created issue on [podman](https://github.com/containers/podman/issues/18375) side and [created pr](https://github.com/89luca89/distrobox/pull/718) for distrobox (still in the process).
-
 1. This is just an attempt to make things easier for Linux users to use ALVR, SteamVR. By no means it's a comprehensive, fully featured and 100% working guide. Please open new issues and pull requests to correct this guide, scripts, etc etc.
 
 2. This guide is not adjusted for Intel gpu owners yet. Only NVIDIA and AMDGPU (Low priority TODO).
@@ -19,6 +17,8 @@
 7. This script can possibly set power profiles for gpus instead of mentioning usage of CoreCtrl (Low priority TODO, needs testing whenever cpu profiles can be set).
 
 8. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause. **Possible cause - latest 530 drivers, so if you happen to have this issue - please try downgrading them to 525 on the host and re-running script. It seems like they has issues with running any container graphics software, including podman/distrobox and flatpak**
+
+9. At the moment, most of the portability issues were fixed, but it's not done, so if you happen to have any kind of issues while running both this and other distroboxes from your system, please report them. I created some issues at podman side ([documentation issue](https://github.com/containers/podman/issues/18375), [storage configuration issue, which prevents complete isolation from runtime containers at the moment](https://github.com/containers/storage/issues/1587)) and [created PR](https://github.com/89luca89/distrobox/pull/718) for distrobox (WIP) to upstream the changes.
 
 ## Installing alvr in distrobox
 
