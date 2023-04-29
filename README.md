@@ -36,11 +36,13 @@ After you have installed required dependencies for your installation from above,
 
    In case if have errors during installation, please report the full log as-is (remove private info if you happen to have some) as an Issue.
    
-   But if you are just reinstalling it, please run `./uninstall-distrobox.sh` first before trying to install again.
+   But if you are just reinstalling it, please run `./uninstall.sh` first before trying to install again.
    
    After full installation, you can use `./start-alvr.sh` to launch alvr automatically.
    
    Script also downloads related apk file to install to headset into `installation` folder for you. Use Sidequest or ADB to install it.
+
+   **Experimental:** Prefixed installation is now available, which allows you to specify where to install relative to this folder. Use --prefix and --container-name to specify folder name and container name (you should specify both for this to work)
 
 ## Post-install ALVR & SteamVR Configuration
 

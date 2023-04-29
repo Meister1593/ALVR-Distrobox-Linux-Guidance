@@ -34,7 +34,7 @@ function init_prefixed_installation() {
    while [[ "$#" -gt 0 ]]; do
       case $1 in
       -p | --prefix)
-         prefix="$2"
+         prefix="$(realpath $2)"
          shift
          ;;
       -c | --container-name)
