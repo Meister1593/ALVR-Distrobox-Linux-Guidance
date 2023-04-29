@@ -20,6 +20,8 @@
 
 9. At the moment, most of the portability issues were fixed, but it's not done, so if you happen to have any kind of issues while running both this and other distroboxes from your system, please report them. I created some issues at podman side ([documentation issue](https://github.com/containers/podman/issues/18375), [storage configuration issue, which prevents complete isolation from runtime containers at the moment](https://github.com/containers/storage/issues/1587)) and [created PR](https://github.com/89luca89/distrobox/pull/718) for distrobox (WIP) to upstream the changes.
 
+10. This script unlikely to work on some external disk setups (still unsure if it affects all kind of disks on all filesystems).
+
 ## Installing alvr in distrobox
 
 For installing you only really need couple of dependencies on host:
