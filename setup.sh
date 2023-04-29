@@ -33,24 +33,22 @@ function detect_audio() {
 function phase1_distrobox_podman_install() {
    echor "Phase 1"
    mkdir $prefix
-   (
-      cd $prefix || exit
+   cd $prefix || exit
 
-      echog "Installing rootless podman locally"
-      mkdir podman
-      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --verbose --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
+   echog "Installing rootless podman locally"
+   mkdir podman
+   curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --verbose --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
 
+   # Installing distrobox from git because it is much newer
+   mkdir distrobox
+   git clone https://github.com/89luca89/distrobox.git distrobox-git
 
-      # Installing distrobox from git because it is much newer
-      mkdir distrobox
-      git clone https://github.com/89luca89/distrobox.git distrobox-git
-      (
-         cd distrobox-git || exit
-         ./install --prefix ../distrobox
-      )
+   cd distrobox-git || exit
+   ./install --prefix ../distrobox
+   cd ..
 
-      rm -rf distrobox-git
-   )
+   rm -rf distrobox-git
+   cd ..
 }
 
 function phase2_distrobox_container_creation() {
@@ -108,7 +106,7 @@ function phase2_distrobox_container_creation() {
       echor "Unsupported audio system ($AUDIO_SYSTEM). Please report this issue."
       exit 1
    fi
-   
+
    distrobox enter --name $container_name --additional-flags "--env prefix=$prefix --env container_name=$container_name" -- ./setup-phase-3.sh
    if [ $? -ne 0 ]; then
       echor "Couldn't install distrobox container first time at phase 3, please report it to maintainer."
