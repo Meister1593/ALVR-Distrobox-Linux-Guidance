@@ -38,7 +38,7 @@ function phase1_distrobox_podman_install() {
 
       echog "Installing rootless podman locally"
       mkdir podman
-      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/test/extras/install-podman | sh -s -- --verbose --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
+      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --verbose --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
 
 
       # Installing distrobox from git because it is much newer
