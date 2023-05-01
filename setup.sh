@@ -83,6 +83,7 @@ function phase2_distrobox_container_creation() {
          read -r HAS_NVIDIA_FLAG
          if [[ $HAS_NVIDIA_FLAG != "y" ]]; then
             echor "Aborting installation as per user request."
+            echor "Please visit https://github.com/89luca89/distrobox/blob/main/docs/posts/install_rootless.md for installing rootless podman and make sure to run it from git repository instead from curl."
             exit 1
          fi
       fi
