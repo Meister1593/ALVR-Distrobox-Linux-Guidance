@@ -11,13 +11,13 @@ if [[ -z $WAYLAND_DISPLAY ]]; then
     fi
 fi
 
-if [[ -n "$(which podman)" ]] && [[ -n "$(which distrobox)" ]]; then
-    echog "Using system podman and distrobox"
-    exit 0
-fi
-
 prefix="$(realpath "$1")"
 export prefix
+
+if [[ -n "$(which podman)" ]] && [[ -n "$(which distrobox)" ]]; then
+    echog "Using system podman and distrobox"
+    return
+fi
 
 export CONTAINERS_CONF=$prefix/.config/containers/containers.conf
 export CONTAINERS_REGISTRIES_CONF=$prefix/.config/containers/registries.conf

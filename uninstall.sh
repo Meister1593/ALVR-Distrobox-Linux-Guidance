@@ -15,5 +15,6 @@ if [[ -z $ROOT_PERMS_COMMAND ]]; then
 fi
 
 podman stop $container_name
+DBX_SUDO_PROGRAM=$ROOT_PERMS_COMMAND distrobox-rm --rm-home $container_name
 
 $ROOT_PERMS_COMMAND rm -rf $prefix

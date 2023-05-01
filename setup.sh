@@ -63,10 +63,10 @@ function phase2_distrobox_container_creation() {
    echor "Phase 2"
    GPU=$(detect_gpu)
    AUDIO_SYSTEM=$(detect_audio)
+   
+   source ./setup-dev-env.sh $prefix
 
    if [[ $system_install == 0 ]]; then
-      source ./setup-dev-env.sh $prefix
-
       if [[ "$(which podman)" != "$prefix/podman/bin/podman" ]]; then
          echor "Failed to install podman properly"
          exit 1

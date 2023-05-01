@@ -11,12 +11,12 @@ if [[ -z $WAYLAND_DISPLAY ]]; then
     fi
 fi
 
+prefix="installation"
+
 if [[ -n "$(which podman)" ]] && [[ -n "$(which distrobox)" ]]; then
     echog "Using system podman and distrobox"
-    exit 0
+    return
 fi
-
-prefix="installation"
 
 init_prefixed_installation "$@"
 
