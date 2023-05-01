@@ -4,6 +4,7 @@ source ./helper-functions.sh
 
 prefix="installation"
 container_name="arch-alvr"
+system_install=1
 
 function detect_gpu() {
    local gpu
@@ -35,19 +36,26 @@ function phase1_distrobox_podman_install() {
    mkdir $prefix
    cd $prefix || exit
 
-   echog "Installing rootless podman locally"
-   mkdir podman
-   curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
+   if [[ -z "$(which podman)" ]]; then
+      system_install=1
+      echog "Installing rootless podman"
+      mkdir podman
+      curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
+   fi
 
-   # Installing distrobox from git because it is much newer
-   mkdir distrobox
-   git clone https://github.com/89luca89/distrobox.git distrobox-git
+   if [[ -z "$(which distrobox)" ]]; then
+      system_install=1
+      echog "Installing distrobox"
+      # Installing distrobox from git because it is much newer
+      mkdir distrobox
+      git clone https://github.com/89luca89/distrobox.git distrobox-git
 
-   cd distrobox-git || exit
-   ./install --prefix ../distrobox
-   cd ..
+      cd distrobox-git || exit
+      ./install --prefix ../distrobox
+      cd ..
 
-   rm -rf distrobox-git
+      rm -rf distrobox-git
+   fi
    cd ..
 }
 
@@ -56,18 +64,28 @@ function phase2_distrobox_container_creation() {
    GPU=$(detect_gpu)
    AUDIO_SYSTEM=$(detect_audio)
 
-   source ./setup-dev-env.sh $prefix
+   if [[ $system_install == 0 ]]; then
+      source ./setup-dev-env.sh $prefix
 
-   echo $prefix
+      if [[ "$(which podman)" != "$prefix/podman/bin/podman" ]]; then
+         echor "Failed to install podman properly"
+         exit 1
+      fi
 
-   if [[ "$(which podman)" != "$prefix/podman/bin/podman" ]]; then
-      echor "Failed to install podman properly"
-      exit 1
-   fi
-
-   if [[ "$(which distrobox)" != "$prefix/distrobox/bin/distrobox" ]]; then
-      echor "Failed to install distrobox properly"
-      exit 1
+      if [[ "$(which distrobox)" != "$prefix/distrobox/bin/distrobox" ]]; then
+         echor "Failed to install distrobox properly"
+         exit 1
+      fi
+   else
+      if [[ $GPU == "nvidia" ]]; then
+         echog "This script requires latest git version of distrobox, which has ability to integrate with host using --nvidia flag."
+         echog "If you have that version, then write y and press enter to continue."
+         read -r HAS_NVIDIA_FLAG
+         if [[ $HAS_NVIDIA_FLAG != "y" ]]; then
+            echor "Aborting installation as per user request."
+            exit 1
+         fi
+      fi
    fi
 
    echo "$GPU" | tee -a $prefix/specs.conf

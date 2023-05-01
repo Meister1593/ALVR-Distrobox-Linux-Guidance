@@ -11,6 +11,11 @@ if [[ -z $WAYLAND_DISPLAY ]]; then
     fi
 fi
 
+if [[ -n "$(which podman)" ]] && [[ -n "$(which distrobox)" ]]; then
+    echog "Using system podman and distrobox"
+    exit 0
+fi
+
 prefix="$(realpath "$1")"
 export prefix
 
