@@ -3,6 +3,7 @@
 prefix="installation"
 
 source ./links.sh
+source ./helper-functions.sh
 
 init_prefixed_installation "$@"
 source ./setup-dev-env.sh "$prefix"
