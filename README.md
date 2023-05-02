@@ -26,7 +26,7 @@
 
 For installing you only really need couple of dependencies on host:
 
-1. `wget` (to download podman/distrobox/alvr/etc)
+1. `wget` + `curl` (to download podman/distrobox/alvr/etc)
 2. `xhost` (on X11 to allow rootless podman to work with graphical applications)
 3. For nvidia - CUDA (as distrobox passes through it into the container and CUDA contains NVENC encoder files)
 
