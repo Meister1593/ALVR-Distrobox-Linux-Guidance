@@ -36,15 +36,15 @@ function phase1_distrobox_podman_install() {
    mkdir $prefix
    cd $prefix || exit
 
-   if [[ -z "$(which podman)" ]]; then
-      system_install=1
+   if ! which podman; then
+      system_install=0
       echog "Installing rootless podman"
       mkdir podman
       curl -s https://raw.githubusercontent.com/Meister1593/distrobox/main/extras/install-podman | sh -s -- --prefix "$PWD" --prefix-name "$container_name" # temporary linked to own repository until MR passes
    fi
 
-   if [[ -z "$(which distrobox)" ]]; then
-      system_install=1
+   if ! which distrobox; then
+      system_install=0
       echog "Installing distrobox"
       # Installing distrobox from git because it is much newer
       mkdir distrobox

@@ -85,7 +85,7 @@ STEP_INDEX=4
 sleep 2
 
 # installing wlxoverlay
-echog "SteamVR overlay is partially broken on Linux and for replacement we will use WlxOverlay, which works with both X11 and Wayland and has ability to control whole desktop from inside VR."
+echog "SteamVR overlay is partially broken on Linux (it also doesn't open games, only allows to interact with already opened games) and for replacement we will use WlxOverlay, which works with both X11 and Wayland and has ability to control whole desktop from inside VR."
 wget -q --show-progress "$WLXOVERLAY_LINK"
 chmod +x "$WLXOVERLAY_FILENAME"
 if [[ "$WAYLAND_DISPLAY" != "" ]]; then

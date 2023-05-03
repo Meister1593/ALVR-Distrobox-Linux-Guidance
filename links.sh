@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ALVR_LINK='https://github.com/alvr-org/ALVR-nightly/releases/download/v20.0.0-dev11%2Bnightly.2023.04.30/ALVR-x86_64.AppImage'
+ALVR_LINK='https://github.com/alvr-org/ALVR-nightly/releases/download/v20.0.0-dev11%2Bnightly.2023.05.01/ALVR-x86_64.AppImage'
 ALVR_FILENAME='ALVR-x86_64.AppImage'
-ALVR_APK_LINK='https://github.com/alvr-org/ALVR-nightly/releases/download/v20.0.0-dev11%2Bnightly.2023.04.30/alvr_client_android.apk'
+ALVR_APK_LINK='https://github.com/alvr-org/ALVR-nightly/releases/download/v20.0.0-dev11%2Bnightly.2023.05.01/alvr_client_android.apk'
 WLXOVERLAY_LINK='https://github.com/galister/WlxOverlay/releases/download/v1.2.5/WlxOverlay-v1.2.5-x86_64.AppImage'
 WLXOVERLAY_FILENAME='WlxOverlay-v1.2.5-x86_64.AppImage'

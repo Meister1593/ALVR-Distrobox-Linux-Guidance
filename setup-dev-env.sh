@@ -14,7 +14,7 @@ fi
 prefix="$(realpath "$1")"
 export prefix
 
-if [[ -n "$(which podman)" ]] && [[ -n "$(which distrobox)" ]]; then
+if which podman && which distrobox; then
     echog "Using system podman and distrobox"
     return
 fi
