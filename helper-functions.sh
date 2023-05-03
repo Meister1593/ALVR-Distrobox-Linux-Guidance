@@ -56,4 +56,6 @@ function init_prefixed_installation() {
       echor "You must choose both prefix and container name to use prefixed installation"
       exit 1
    fi
+   export prefix
+   export container_name
 }
