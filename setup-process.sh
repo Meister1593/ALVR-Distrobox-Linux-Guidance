@@ -83,7 +83,7 @@ function phase2_distrobox_container_creation() {
          echog "This script requires latest git version of distrobox, which has ability to integrate with host using --nvidia flag."
          echog "If you have that version, then write y and press enter to continue."
          read -r HAS_NVIDIA_FLAG
-         if [[ $HAS_NVIDIA_FLAG != "y" ]]; then
+         if [[ "$HAS_NVIDIA_FLAG" != "y" ]]; then
             echor "Aborting installation as per user request."
             echor "Please visit https://github.com/89luca89/distrobox/blob/main/docs/posts/install_rootless.md for installing rootless podman and make sure to run it from git repository instead from curl."
             exit 1
@@ -145,7 +145,7 @@ function phase2_distrobox_container_creation() {
 
 init_prefixed_installation "$@"
 if [[ "$prefix" =~ \  ]]; then
-   echor "File path to container can't contains spaces as SteamVR will fail to launch if path to it would contain spaces."
+   echor "File path to container can't contains spaces as SteamVR will fail to launch if path to it contains spaces."
    echor "Please clone or unpack repository into another directory that doesn't contain spaces."
    exit 1
 fi
