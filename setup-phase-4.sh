@@ -126,6 +126,6 @@ echor "To start alvr now you need to use start-alvr.sh script from this reposito
 echog "In case you want to enter into container, do 'source setup-env.sh && distrobox-enter arch-alvr'"
 echog "To close vr, press ctrl+c in terminal where start-alvr.sh script is running. It will automatically close alvr and steamvr."
 echor "Very important: to prevent game from looking like it's severily lagging, please turn on legacy reprojection in per-app video settings in steamvr. This improves experience drastically."
+echog "Don't forget to enable Steam Play for all supported titles with latest (non-experimental) proton to make all games visible as playable in Steam."
 echog "Tip: to prevent double-restart due to how client resets it's settings, you can change settings and then put headset to sleep, and power back. This restarts client and server, and prevents double restart."
-
 echog "Thank you for using the script! Continue with Post-installation notes to configure ALVR and SteamVR"
