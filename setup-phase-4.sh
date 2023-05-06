@@ -47,7 +47,7 @@ sleep 2
 echog "Installed base packages and Steam. Opening steam. Please install SteamVR from it."
 steam &>/dev/null &
 echog "After installing SteamVR, copy (ctrl + shift + c from terminal) and launch command bellow from your host terminal shell (outside this container) and press enter to continue there. This prevents annoying popup (yes/no with asking for superuser) that prevents steamvr from launching automatically."
-echog "sudo setcap CAP_SYS_NICE+ep $HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64/vrcompositor-launcher"
+echog "sudo setcap 'CAP_SYS_NICE+ep $HOME/.steam/steam/steamapps/common/SteamVR/bin/linux64/vrcompositor-launcher'"
 read
 echog "Now launch SteamVR once and close it."
 echog "At this point you can safely add your external library from the host system ('/home/$USER' is same from inside the script container as from outside)"
