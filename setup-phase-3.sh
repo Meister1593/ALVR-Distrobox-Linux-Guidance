@@ -3,7 +3,7 @@
 source ./links.sh
 source ./helper-functions.sh
 
-if [[ -z $prefix ]]; then
+if [[ -z "$prefix" ]]; then
    echor "No prefix found inside distrobox, aborting"
    exit 1
 fi

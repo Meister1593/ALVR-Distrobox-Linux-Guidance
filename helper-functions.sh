@@ -29,12 +29,12 @@ function init_prefixed_installation() {
       echog "Using default installation with default name"
       return
    fi
-   before_prefix=$prefix
-   before_container_name=$container_name
+   before_prefix="$prefix"
+   before_container_name="$container_name"
    while [[ "$#" -gt 0 ]]; do
       case $1 in
       -p | --prefix)
-         prefix="$(realpath $2)"
+         prefix="$(realpath "$2")"
          shift
          ;;
       -c | --container-name)
@@ -52,7 +52,7 @@ function init_prefixed_installation() {
       esac
       shift
    done
-   if [[ $before_prefix == "$prefix" ]] || [[ $before_container_name == "$container_name" ]]; then
+   if [[ "$before_prefix" == "$prefix" ]] || [[ "$before_container_name" == "$container_name" ]]; then
       echor "You must choose both prefix and container name to use prefixed installation"
       exit 1
    fi
