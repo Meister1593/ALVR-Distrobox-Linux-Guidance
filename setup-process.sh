@@ -144,5 +144,10 @@ function phase2_distrobox_container_creation() {
 }
 
 init_prefixed_installation "$@"
+if [[ "$prefix" =~ \  ]]; then
+   echor "File path to container can't contains spaces as SteamVR will fail to launch if path to it would contain spaces."
+   echor "Please clone or unpack repository into another directory that doesn't contain spaces."
+   exit 1
+fi
 phase1_distrobox_podman_install
 phase2_distrobox_container_creation
