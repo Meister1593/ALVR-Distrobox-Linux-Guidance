@@ -16,7 +16,7 @@ chmod +x "$prefix/$ALVR_FILENAME"
 mv squashfs-root $prefix/alvr
 
 echog "Deleting existing wlxoverlay"
-rm "$prefix/WlxOverlay-v*-x86_64.AppImage*"
+rm "$prefix"/WlxOverlay-v*-x86_64.AppImage*
 wget -q --show-progress -P "$prefix/" "$WLXOVERLAY_LINK"
 chmod +x "$prefix/$WLXOVERLAY_FILENAME"
 
