@@ -1,7 +1,6 @@
 ## Installing ALVR and using SteamVR on Linux through Distrobox
 
 ## Disclaimer
-## Currently alvr doesn't start using the button in dashboard, there would be new nightly with fix in a day
 
 1. This is just an attempt to make things easier for Linux users to use ALVR, SteamVR. By no means it's a comprehensive, fully featured and 100% working guide. Please open new issues and pull requests to correct this guide, scripts, etc etc.
 
