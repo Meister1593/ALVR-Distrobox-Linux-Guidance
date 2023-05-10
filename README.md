@@ -27,7 +27,8 @@ For installing you only really need couple of dependencies on host:
 1. `wget` + `curl` (to download podman/distrobox/alvr/etc)
 2. `xhost` (on X11 to allow rootless podman to work with graphical applications)
 3. `sed` (for removing color in logs)
-4. For nvidia - CUDA (as distrobox passes through it into the container and CUDA contains NVENC encoder files)
+4. `pipewire` for fully automatic microphone, `pulseaudio` for basic audio support (automatic microphone is unsupported with it)
+5. For nvidia - CUDA (as distrobox passes through it into the container and CUDA contains NVENC encoder files)
 
 After you have installed required dependencies for your installation from above, open terminal in this repository folder and do:
 
