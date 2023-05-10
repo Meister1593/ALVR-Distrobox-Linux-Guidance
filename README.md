@@ -8,19 +8,17 @@
 
 3. Slimevr, OpenVRAS, Open Space Calibrator are all possible to launch and use on Linux, but this guide/script is not adjusted yet (Medium priority TODO).
 
-4. Microphone configuration currently isn't done yet, vr startup script creates sink to be used for vr, but it's not explained (High priority TODO).
+4. Firewall configuration is skipped entirely and setup firewall configuration is broken, so it might not work in case you have strict firewall (alvr docs should have info about that) (Low priority TODO).
 
-5. Firewall configuration is skipped entirely and setup firewall configuration is broken, so it might not work in case you have strict firewall (alvr docs should have info about that) (Low priority TODO).
+5. Don't use SteamVR Beta (1.26+) version, it contains a lot of breaking changes that are yet to be tested to work with.
 
-6. Don't use SteamVR Beta (1.26+) version, it contains a lot of breaking changes that are yet to be tested to work with.
+6. This script can possibly set power profiles for gpus instead of mentioning usage of CoreCtrl (Low priority TODO, needs testing whenever cpu profiles can be set).
 
-7. This script can possibly set power profiles for gpus instead of mentioning usage of CoreCtrl (Low priority TODO, needs testing whenever cpu profiles can be set).
+7. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause. **Possible cause - latest 530 drivers, so if you happen to have this issue - please try downgrading them to 525 on the host and re-running script. It seems like they has issues with running any container graphics software, including podman/distrobox and flatpak**
 
-8. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause. **Possible cause - latest 530 drivers, so if you happen to have this issue - please try downgrading them to 525 on the host and re-running script. It seems like they has issues with running any container graphics software, including podman/distrobox and flatpak**
+8. At the moment, most of the portability issues were fixed, but it's not done, so if you happen to have any kind of issues while running both this and other distroboxes from your system, please report them. I created some issues at podman side ([documentation issue](https://github.com/containers/podman/issues/18375), [storage configuration issue, which prevents complete isolation from runtime containers at the moment](https://github.com/containers/storage/issues/1587)) and [created PR](https://github.com/89luca89/distrobox/pull/718) for distrobox (WIP) to upstream the changes.
 
-9. At the moment, most of the portability issues were fixed, but it's not done, so if you happen to have any kind of issues while running both this and other distroboxes from your system, please report them. I created some issues at podman side ([documentation issue](https://github.com/containers/podman/issues/18375), [storage configuration issue, which prevents complete isolation from runtime containers at the moment](https://github.com/containers/storage/issues/1587)) and [created PR](https://github.com/89luca89/distrobox/pull/718) for distrobox (WIP) to upstream the changes.
-
-10. This script unlikely to work on some external disk setups (still unsure if it affects all kind of disks on all filesystems).
+9. This script unlikely to work on some external disk setups (still unsure if it affects all kind of disks on all filesystems).
 
 ## Installing alvr in distrobox
 
@@ -59,7 +57,7 @@ After installing ALVR you may want to configure it and steamvr to run at best qu
 
 3. **Encoder preset:** Quality
 
-4. **Game Audio & Microphone:** pipewire. Microphone configuration will be added later.
+4. **Game Audio & Microphone:** Set to pipewire. Every time ALVR is launched through the script, it creates audio source named **ALVR-Microphone-Source**, use it in games and apps. Link between alvr and source is done automatically and only requires to have present (not sleeping) headset upon launching alvr.
 
 5. **Bitrate:** Adaptive, maximum bitrate: 150 mbps, minimum bitrate: 100 mbps.
 

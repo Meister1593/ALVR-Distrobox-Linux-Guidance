@@ -14,11 +14,11 @@ function echor() {
 }
 function cleanup_alvr() {
    echog "Cleaning up ALVR"
-   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
+   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard SlimeVR-amd64* slimevr openvr-spacecalibrator; do
       pkill -f $vrp
    done
    sleep 3
-   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard; do
+   for vrp in vrdashboard vrcompositor vrserver vrmonitor vrwebhelper vrstartup alvr_dashboard SlimeVR-amd64* slimevr openvr-spacecalibrator; do
       pkill -f -9 $vrp
    done
 }

@@ -121,8 +121,11 @@ function phase2_distrobox_container_creation() {
       exit 1
    fi
 
-   if [[ "$AUDIO_SYSTEM" == "pipewire" ]] || [[ "$AUDIO_SYSTEM" == "pulse" ]]; then
+   if [[ "$AUDIO_SYSTEM" == "pipewire" ]]; then
       echo "$AUDIO_SYSTEM" | tee -a "$prefix/specs.conf"
+   elif [[ "$AUDIO_SYSTEM" == "pulse" ]]; then
+      echo "$AUDIO_SYSTEM" | tee -a "$prefix/specs.conf"
+      echor "Do note that pulseaudio doesn't work well with ALVR and automatic microphone routing won't work."
    else
       echor "Unsupported audio system ($AUDIO_SYSTEM). Please report this issue."
       exit 1
