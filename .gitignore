@@ -1,2 +1,6 @@
 installation/*
 *.log
+
+# Added by cargo
+
+/target
