@@ -68,8 +68,11 @@ mv squashfs-root alvr
 ./alvr/usr/bin/alvr_dashboard &>/dev/null &
 echog "ALVR and dashboard now launch and when it does that, skip setup (X button on right up corner)."
 echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu and 'Streamer: Connected' in ALVR dashboard."
-echog "In ALVR Dashboard settings at left side, scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
-echog "You can also untick 'Open setup wizard' too."
+echog "In ALVR Dashboard settings at left side, in the beginning set 'Game Audio' and 'Game Microphone' to pipewire (if possible)."
+echog "Scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
+echog "Find 'On connect script' and 'On disconnect script' as well and put $(realpath "$PWD"/../mic-setup.sh) (confirm each of them with enter on text box) into both of them. This is for automatic microphone that will load/unload based on connection to the headset"
+echog "Next time you connect headset, set 'ALVR-MIC-Source' as your default microphone, it will automatically switch to it whenever it shows up."
+echog "Tick 'Open setup wizard' too to prevent popup on dashboard startup."
 echog "After you have done with this, press enter here."
 read
 cleanup_alvr
@@ -87,7 +90,7 @@ sleep 2
 
 # installing wlxoverlay
 echog "SteamVR overlay is partially broken on Linux (it also doesn't open games, only allows to interact with already opened games) and for replacement we will use WlxOverlay, which works with both X11 and Wayland and has ability to control whole desktop from inside VR."
-wget -q --show-progress "$WLXOVERLAY_LINK"
+wget -q --show-progress -O "$WLXOVERLAY_FILENAME" "$WLXOVERLAY_LINK"
 chmod +x "$WLXOVERLAY_FILENAME"
 if [[ "$WAYLAND_DISPLAY" != "" ]]; then
    echog "If you're not (on wlroots-based compositor like Sway), it will ask for display to choose. Choose displays if you have more than 1."

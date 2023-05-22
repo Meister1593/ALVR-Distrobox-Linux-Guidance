@@ -14,7 +14,7 @@
 
 6. This script can possibly set power profiles for gpus instead of mentioning usage of CoreCtrl (Low priority TODO, needs testing whenever cpu profiles can be set).
 
-7. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause. **Possible cause - latest 530 drivers, so if you happen to have this issue - please try downgrading them to 525 on the host and re-running script. It seems like they has issues with running any container graphics software, including podman/distrobox and flatpak**
+7. Some nvidia users might experience 307 steamvr crash, which is found at least with one user, and solution isn't found yet, but currently actively looking for the cause. **Possible cause - latest 530 drivers, so if you happen to have this issue - please try downgrading them to 525 or updating drivers to higher than 530 on the host and re-running script. It seems like they has issues with running any container graphics software, including podman/distrobox and flatpak**
 
 8. At the moment, most of the portability issues were fixed, but it's not done, so if you happen to have any kind of issues while running both this and other distroboxes from your system, please report them. I created some issues at podman side ([documentation issue](https://github.com/containers/podman/issues/18375), [storage configuration issue, which prevents complete isolation from runtime containers at the moment](https://github.com/containers/storage/issues/1587)) and [created PR](https://github.com/89luca89/distrobox/pull/718) for distrobox (WIP) to upstream the changes.
 
@@ -54,11 +54,11 @@ After installing ALVR you may want to configure it and steamvr to run at best qu
 
 1. **Resolution:** If you have 6600 XT level GPU you can select Low, and in case you don't mind lower FPS - Medium
 
-2. **Preferred framerate:** If you know that you will have lower fps than usual (for instance, VRChat), run at lower fps. This is because if reprojection (this is what allows for smooth view despite being at low fps) goes lower than twice the amount of specified framerate - it fails to reproject and will look worse. So for example, you can run at 72hz if you know you're expecting low framerate, and 120hz if you are going to play something like Beat Saber, which is unlikely to run at low fps.
+2. **Preferred framerate:** If you know that you will have lower fps than usual (for instance, VRChat), run at lower fps. This is because when reprojection (this is what allows for smooth view despite being at low fps) goes lower than twice the amount of specified framerate - it fails to reproject and will look worse. So for example, you can run at 72hz if you know you're expecting low framerate, and 120hz if you are going to play something like Beat Saber, which is unlikely to run at low fps.
 
 3. **Encoder preset:** Quality
 
-4. **Game Audio & Microphone:** Set to pipewire. Every time ALVR is launched through the script, it creates audio source named **ALVR-Microphone-Source**, use it in games and apps. Link between alvr and source is done automatically and only requires to have present (not sleeping) headset upon launching alvr.
+4. **Game Audio & Microphone:** Set to pipewire as has been said in installation. ALVR uses default audio sink for audio, and doesn't care about volume (it's controlled only onboard audio on headset), so you can either leave it with volume for audio mirroring or mute to prevent mirroring on pc. As for microphone, every time ALVR is connected to headset, on connect script creates audio source named **ALVR-MIC-Source**, which can be used in game as default microphone, if you set it at least once. No need to un-set it back to default, when headset disconnects it automatically clears it and restores back to previous microphone.
 
 5. **Bitrate:** Adaptive, maximum bitrate: 150 mbps, minimum bitrate: 100 mbps.
 
