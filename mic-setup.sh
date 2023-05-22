@@ -34,7 +34,6 @@ function setup_mic() {
   # We link them together
   pw-link ALVR-MIC-Sink ALVR-MIC-Source
   # And we assign playback of pipewire alsa playback to created alvr sink
-  echo "$(get_alvr_playback_sink_id) $(get_alvr_sink_id)" | tee "/tmp/alvr-mic"
   pactl move-sink-input "$(get_alvr_playback_sink_id)" "$(get_alvr_sink_id)"
   echo "$sink_mic_id|$source_mic_id" | tee "/tmp/alvr-mic-ids"
 }
