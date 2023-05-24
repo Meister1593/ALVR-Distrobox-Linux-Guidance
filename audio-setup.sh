@@ -48,9 +48,13 @@ function unload_mic() {
   pactl unload-module "$source_mic_id"
 }
 
-if [[ $ACTION = "connect" ]]; then
-  sleep 1
-  setup_mic
-else
-  unload_mic
-fi
+case $ACTION in
+	connect)
+		pactl set-sink-mute @DEFAULT_SINK@ 1
+		sleep 1
+		setup_mic
+		;;
+        disconnect)
+                pactl set-sink-mute @DEFAULT_SINK@ 0
+		unload_mic;;
+esac

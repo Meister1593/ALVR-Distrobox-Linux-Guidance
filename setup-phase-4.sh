@@ -70,7 +70,7 @@ echog "ALVR and dashboard now launch and when it does that, skip setup (X button
 echog "After that, launch SteamVR using button on left lower corner and after starting steamvr, you should see one headset showing up in steamvr menu and 'Streamer: Connected' in ALVR dashboard."
 echog "In ALVR Dashboard settings at left side, in the beginning set 'Game Audio' and 'Game Microphone' to pipewire (if possible)."
 echog "Scroll all the way down and find 'Driver launch action', set it to 'No action' to prevent alvr from unregistering itself after startup."
-echog "Find 'On connect script' and 'On disconnect script' as well and put $(realpath "$PWD"/../mic-setup.sh) (confirm each of them with enter on text box) into both of them. This is for automatic microphone that will load/unload based on connection to the headset"
+echog "Find 'On connect script' and 'On disconnect script' as well and put $(realpath "$PWD"/../audio-setup.sh) (confirm each of them with enter on text box) into both of them. This is for automatic microphone that will load/unload based on connection to the headset"
 echog "Next time you connect headset, set 'ALVR-MIC-Source' as your default microphone, it will automatically switch to it whenever it shows up."
 echog "Tick 'Open setup wizard' too to prevent popup on dashboard startup."
 echog "After you have done with this, press enter here."
