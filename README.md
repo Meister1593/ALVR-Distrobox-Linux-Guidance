@@ -1,5 +1,7 @@
 ## Installing ALVR and using SteamVR on Linux through Distrobox
 
+## THIS GUIDANCE GOT MERGED INTO ALVR AND THIS REPOSITORY WON'T BE UPDATED ANYMORE, PLEASE FOLLOW THE GUIDE [THERE](https://github.com/alvr-org/ALVR/wiki/Installation-guide#semi-automatic-arch-distrobox-guidance)
+
 ## Disclaimer
 
 1. This is just an attempt to make things easier for Linux users to use ALVR, SteamVR. By no means it's a comprehensive, fully featured and 100% working guide. Please open new issues and pull requests to correct this guide, scripts, etc etc.
